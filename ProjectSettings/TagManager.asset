@@ -41,6 +41,30 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Background
+    uniqueID: 1168867151
+    locked: 0
+  - name: Underlay3
+    uniqueID: 2210968175
+    locked: 0
+  - name: Underlay2
+    uniqueID: 2009600129
+    locked: 0
+  - name: Underlay1
+    uniqueID: 2591799463
+    locked: 0
+  - name: Platforms
+    uniqueID: 2359370395
+    locked: 0
+  - name: Characters
+    uniqueID: 3173676277
+    locked: 0
+  - name: Overlay1
+    uniqueID: 3136289371
+    locked: 0
+  - name: Overlay2
+    uniqueID: 2427548563
+    locked: 0
   m_RenderingLayers:
   - Default
   - Light Layer 1
