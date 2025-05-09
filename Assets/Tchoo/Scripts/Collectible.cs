@@ -2,13 +2,18 @@ using UnityEngine;
 
 public class Collectible : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    private Material material;
+
+    private void Start()
+    {
+        material = GetComponentInChildren<ParticleSystemRenderer>().material;
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("trigger");
         if (collision.TryGetComponent(out PlayerController player))
         {
-            player.CollectFoolet();
+            player.CollectFoolet(material.GetColor("_GlowColor"));
             Destroy(gameObject);
         }
     }

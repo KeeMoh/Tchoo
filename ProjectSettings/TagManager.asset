@@ -12,7 +12,7 @@ TagManager:
   - Water
   - UI
   - Wall
-  - 
+  - CameraSortingLayer
   - 
   - 
   - 
@@ -52,6 +52,9 @@ TagManager:
     locked: 0
   - name: Underlay1
     uniqueID: 2591799463
+    locked: 0
+  - name: CameraSortingLayer
+    uniqueID: 2556864813
     locked: 0
   - name: Platforms
     uniqueID: 2359370395

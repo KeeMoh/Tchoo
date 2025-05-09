@@ -1,9 +1,13 @@
+using DG.Tweening;
+using NaughtyAttributes;
+using System;
 using System.Collections;
 using System.ComponentModel;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
@@ -43,9 +47,21 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float wallJumpDirection;
     [SerializeField] private float wallJumpTime = 0.5f;
     [SerializeField] private float wallJumpTimer;
-    [Header("Debug")]
+    [Header("Corruption")]
+    [SerializeField] private float minCorruption;
+    [SerializeField] private float maxCorruption;
+    [SerializeField] private Gradient colorCorruption;
+    private float currentCorruption = 0f;
 
+    [Header("Effects")]
+    [SerializeField] private ParticleSystem[] jumpEffects;
+    [SerializeField] private SpriteRenderer sprite;
+    [SerializeField] private Light2D[] lights;
+    [SerializeField] private ParticleSystem getFooletEffects;
+    [SerializeField] private Material fooletMat;
     [SerializeField] private Animator animator;
+
+    [Header("Debug")]
     [SerializeField] private TextMeshPro TMP;
     [SerializeField] private Image imgGround;
     [SerializeField] private Image imgWall;
@@ -53,6 +69,7 @@ public class PlayerController : MonoBehaviour
 
     bool isWallJumping;
 
+    public event Action<float, bool> OnCorruptionValueChange;
     //[SerializeField] private bool isWallSliding;
 
     public float horizontalMovement;
@@ -60,6 +77,19 @@ public class PlayerController : MonoBehaviour
     private float jumpPressedTime;
     private bool isFirstJumpPressed;
     private bool isFacingRight = true;
+    private float timeSinceGrounded = 0f;
+    private float timeAllowedForJump = 0.22f;
+    private bool isCorrupted = false;
+
+    private void Start()
+    {
+        sprite.color = colorCorruption.Evaluate(0f);
+        foreach(var item in lights)
+        {
+            item.color = colorCorruption.Evaluate(0f);
+        }
+        currentCorruption = minCorruption;
+    }
 
     void Update()
     {
@@ -84,9 +114,61 @@ public class PlayerController : MonoBehaviour
             : Mathf.Clamp(rb.linearVelocityY, GetFallSpeed(), jumpForce);
     }
 
-    public void CollectFoolet()
+    [Button]
+    private void GainCorruption()
+    {
+        GainCorruption(0.5f);
+    }    
+    [Button]
+    private void GainSanity()
+    {
+        GainSanity(0.5f);
+    }
+    public void GainCorruption(float corruptionValue)
+    {
+        bool switchState = false;
+        if (currentCorruption == 0 && !isCorrupted)
+        {
+            isCorrupted = true;
+            switchState = true;
+        }
+        
+        currentCorruption = Mathf.Min(currentCorruption + corruptionValue, maxCorruption);
+
+        if (!isCorrupted && currentCorruption > 0) currentCorruption = 0;
+        //Changer pour valeur entre 0 et 1
+        float range = maxCorruption - minCorruption;
+        float delta = currentCorruption - minCorruption;
+        float percentage = delta / range;
+        sprite.DOColor(colorCorruption.Evaluate(percentage), 0.5f);
+        OnCorruptionValueChange?.Invoke(Mathf.Abs(currentCorruption / maxCorruption), switchState);
+    }
+    public void GainSanity(float sanityValue)
+    {
+        bool switchState = false;
+        if (currentCorruption == 0 && isCorrupted)
+        {
+            isCorrupted = false;
+            switchState = true;
+        }
+
+        currentCorruption = Mathf.Max(currentCorruption - sanityValue, minCorruption);
+        
+        if (isCorrupted && currentCorruption < 0) currentCorruption = 0;
+        float range = maxCorruption - minCorruption;
+        float delta = currentCorruption - minCorruption;
+        float percentage = delta / range;
+        
+        sprite.DOColor(colorCorruption.Evaluate(percentage), 0.5f);
+        OnCorruptionValueChange?.Invoke(Mathf.Abs(currentCorruption / maxCorruption), switchState);
+    }
+
+    public void CollectFoolet(Color color)
     {
         maxJump++;
+        fooletMat.SetColor("_GlowColor", color);
+        getFooletEffects.Play();
+        GainCorruption(0.75f);
     }
 
     public void Move(InputAction.CallbackContext context)
@@ -127,51 +209,64 @@ public class PlayerController : MonoBehaviour
     
     public void Jump(InputAction.CallbackContext context)
     {
-        if (context.performed && jumpRemaining > 0)
+
+        //Wall Jump
+        if (context.performed)
         {
-            if(IsGrounded())
+            if(isWallSliding() && wallJumpTimer > 0f)
+            {
+                Debug.Log("WallJump");
+                isWallJumping = true;
+                rb.linearVelocity = new Vector2(wallJumpDirection * wallJumpPower.x, wallJumpPower.y);
+                animator.SetTrigger("jump");
+
+                wallJumpTimer = 0f;
+
+                //forceFlip
+                if (transform.localScale.x != wallJumpDirection)
+                {
+                    isFacingRight = !isFacingRight;
+                    Vector3 ls = transform.localScale;
+                    ls.x *= -1f;
+                    transform.localScale = ls;
+                    wallCheckOffset.x *= -1f;
+                }
+
+                Invoke(nameof(cancelWallJump), wallJumpTime);
+                return;
+            }
+            if (IsGrounded() || (timeSinceGrounded < timeAllowedForJump && jumpRemaining == maxJump))
             {
                 rb.linearVelocityY = jumpForce;
                 isFirstJumpPressed = true;
                 animator.SetTrigger("jump");
                 StopAllCoroutines();
                 StartCoroutine(handleFirstJumpTime());
+                jumpRemaining--;
+                return;
             }
-            else
+            if(jumpRemaining > 0)
             {
-                if(jumpRemaining == maxJump) jumpRemaining--;
+                if (jumpRemaining == maxJump) jumpRemaining--;
                 if (jumpRemaining == 0) return;
                 animator.SetTrigger("jump");
                 rb.linearVelocityY = doubleJumpForce;
+                foreach (var effect in jumpEffects)
+                {
+                    effect.Play();
+                }
+                jumpRemaining--;
             }
-            jumpRemaining--;
+
         }
+        
         if (context.canceled && rb.linearVelocityY > 0)
         {
             isFirstJumpPressed = false; // Stop coroutine with this bool
         }
 
-        //Wall Jump
-        if(context.performed && wallJumpTimer > 0f)
-        {
-            isWallJumping = true;
-            rb.linearVelocity = new Vector2(wallJumpDirection * wallJumpPower.x, wallJumpPower.y);
-            animator.SetTrigger("jump");
 
-            wallJumpTimer = 0f;
 
-            //forceFlip
-            if(transform.localScale.x != wallJumpDirection)
-            {
-                isFacingRight = !isFacingRight;
-                Vector3 ls = transform.localScale;
-                ls.x *= -1f;
-                transform.localScale = ls;
-                wallCheckOffset.x *= -1f;
-            }
-
-            Invoke(nameof(cancelWallJump), wallJumpTime + 0.1f);
-        }
     }
 
     private void ProcessGravity()
@@ -219,16 +314,13 @@ public class PlayerController : MonoBehaviour
     {
         float jumpMaxPressTime = timeToPressJump[timeToPressJump.Length-1];
         jumpPressedTime = 0;
-        //Debug.Log("start handleFirstJumpTime");
         while (isFirstJumpPressed)
         {
             jumpPressedTime += Time.deltaTime;
-            if(!IsGrounded() && jumpRemaining == maxJump) { jumpRemaining--; }
             if(jumpPressedTime >= jumpMaxPressTime)
             {
                 isFirstJumpPressed = false;
                 TMP.text = (timeToPressJump.Length+1).ToString();
-                //Debug.Log($"time max jump pressed ({jumpPressedTime})");
                 yield return new WaitForSeconds(0.5f);
                 TMP.text = "";
                 yield break;
@@ -241,10 +333,8 @@ public class PlayerController : MonoBehaviour
             {
                 if (jumpPressedTime < timeToPressJump[i])
                 {
-                    //Debug.Log($"jump stop press at {jumpPressedTime} ({i+1}')");
                     TMP.text = (i+1).ToString();
                     yield return new WaitForSeconds(timeToPressJump[i] - jumpPressedTime);
-                    //Debug.Log($"yield break after {timeToPressJump[i] - jumpPressedTime}");
                     StartCoroutine(stopPositiveVelocityY());
                     yield break;
                 }
@@ -258,7 +348,6 @@ public class PlayerController : MonoBehaviour
     {
         while (rb.linearVelocityY > 0.1f)
         {
-            //Debug.Log("velocityY = " + rb.linearVelocityY);
             rb.linearVelocityY = Mathf.Min(Mathf.Lerp(rb.linearVelocityY, 0f, 0.15f),jumpForce/2);
             yield return null;
         }
@@ -271,19 +360,20 @@ public class PlayerController : MonoBehaviour
     {
         if (Physics2D.OverlapBox(groundCheckPos.position + (Vector3)groundCheckOffset, groundCheckSize, 0, groundLayer))
         {
-            //Debug.Log("detect ground");
-            imgGround.color = Color.yellow;
+            timeSinceGrounded = 0;
             return true;
         }
-        imgGround.color = debugColor;
-        return false;
+        else
+        {
+            timeSinceGrounded += Time.deltaTime;
+            return false;
+        }
     }    
     
     private bool IsBesideWall()
     {
         if (Physics2D.OverlapBox(wallCheckPos.position + (Vector3)wallCheckOffset, wallCheckSize, 0, wallLayer))
         {
-            //Debug.Log("detect wall");
             imgWall.color = Color.blue;
             return true;
         }
