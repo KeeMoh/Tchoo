@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7166333739919238991}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -31,6 +31,7 @@ Transform:
   m_Children:
   - {fileID: 4556987703782098587}
   - {fileID: 719955942659443921}
+  - {fileID: 4153133849068641725}
   m_Father: {fileID: 1442468473066678534}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1351889877285467940
@@ -43,7 +44,7 @@ GameObject:
   m_Component:
   - component: {fileID: 693424276798284602}
   - component: {fileID: 3779613148703195487}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -191,7 +192,7 @@ GameObject:
   m_Component:
   - component: {fileID: 719955942659443921}
   - component: {fileID: 3401185468216797385}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Light_Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -206,7 +207,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3734218979457949983}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -0.19999981, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -220,7 +221,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3734218979457949983}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 073797afb82c5a1438f328866b10b3f0, type: 3}
   m_Name: 
@@ -228,12 +229,12 @@ MonoBehaviour:
   m_ComponentVersion: 2
   m_LightType: 3
   m_BlendStyleIndex: 0
-  m_FalloffIntensity: 0.7
-  m_Color: {r: 0.6933962, g: 0.975783, b: 1, a: 1}
-  m_Intensity: 2
+  m_FalloffIntensity: 0
+  m_Color: {r: 0.6933962, g: 1, b: 0.9863919, a: 1}
+  m_Intensity: 0.15
   m_LightVolumeIntensity: 0.05
-  m_LightVolumeEnabled: 1
-  m_ApplyToSortingLayers: 4f7fab45a7b87b9a
+  m_LightVolumeEnabled: 0
+  m_ApplyToSortingLayers: 4f7fab456fb2c8838110c877a7b87b9a
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
@@ -253,8 +254,92 @@ MonoBehaviour:
     m_Extent: {x: 0.9985302, y: 0.99853027, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
-  m_PointLightInnerRadius: 0.3
-  m_PointLightOuterRadius: 4
+  m_PointLightInnerRadius: 5
+  m_PointLightOuterRadius: 7
+  m_ShapeLightParametricSides: 5
+  m_ShapeLightParametricAngleOffset: 0
+  m_ShapeLightParametricRadius: 1
+  m_ShapeLightFalloffSize: 0.5
+  m_ShapeLightFalloffOffset: {x: 0, y: 0}
+  m_ShapePath:
+  - {x: -0.5, y: -0.5, z: 0}
+  - {x: 0.5, y: -0.5, z: 0}
+  - {x: 0.5, y: 0.5, z: 0}
+  - {x: -0.5, y: 0.5, z: 0}
+--- !u!1 &4282261974192214253
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4153133849068641725}
+  - component: {fileID: 1471676920736820356}
+  m_Layer: 8
+  m_Name: Light_Characters
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4153133849068641725
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4282261974192214253}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.19999981, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7166333739919238991}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1471676920736820356
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4282261974192214253}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 073797afb82c5a1438f328866b10b3f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ComponentVersion: 2
+  m_LightType: 3
+  m_BlendStyleIndex: 0
+  m_FalloffIntensity: 0.4
+  m_Color: {r: 0.6933962, g: 1, b: 0.9863919, a: 1}
+  m_Intensity: 0.5
+  m_LightVolumeIntensity: 0.05
+  m_LightVolumeEnabled: 0
+  m_ApplyToSortingLayers: f5742abd
+  m_LightCookieSprite: {fileID: 0}
+  m_DeprecatedPointLightCookieSprite: {fileID: 0}
+  m_LightOrder: 0
+  m_AlphaBlendOnOverlap: 0
+  m_OverlapOperation: 0
+  m_NormalMapDistance: 3
+  m_NormalMapQuality: 2
+  m_UseNormalMap: 0
+  m_ShadowsEnabled: 1
+  m_ShadowIntensity: 0.75
+  m_ShadowSoftness: 0.3
+  m_ShadowSoftnessFalloffIntensity: 0.5
+  m_ShadowVolumeIntensityEnabled: 0
+  m_ShadowVolumeIntensity: 1
+  m_LocalBounds:
+    m_Center: {x: 0, y: -0.00000011920929, z: 0}
+    m_Extent: {x: 0.9985302, y: 0.99853027, z: 0}
+  m_PointLightInnerAngle: 360
+  m_PointLightOuterAngle: 360
+  m_PointLightInnerRadius: 4
+  m_PointLightOuterRadius: 5
   m_ShapeLightParametricSides: 5
   m_ShapeLightParametricAngleOffset: 0
   m_ShapeLightParametricRadius: 1
@@ -275,7 +360,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4556987703782098587}
   - component: {fileID: 1495956339398803627}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Light_Platforms
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -304,7 +389,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4337866583688271267}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 073797afb82c5a1438f328866b10b3f0, type: 3}
   m_Name: 
@@ -312,11 +397,11 @@ MonoBehaviour:
   m_ComponentVersion: 2
   m_LightType: 3
   m_BlendStyleIndex: 0
-  m_FalloffIntensity: 0.7
-  m_Color: {r: 0.69411767, g: 0.9764706, b: 1, a: 1}
-  m_Intensity: 4
+  m_FalloffIntensity: 0.5
+  m_Color: {r: 0.740566, g: 0.9800435, b: 1, a: 1}
+  m_Intensity: 0.5
   m_LightVolumeIntensity: 0.005
-  m_LightVolumeEnabled: 1
+  m_LightVolumeEnabled: 0
   m_ApplyToSortingLayers: 9b22a18c
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
@@ -337,7 +422,7 @@ MonoBehaviour:
     m_Extent: {x: 0.9985302, y: 0.99853027, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
-  m_PointLightInnerRadius: 2
+  m_PointLightInnerRadius: 5
   m_PointLightOuterRadius: 8
   m_ShapeLightParametricSides: 5
   m_ShapeLightParametricAngleOffset: 0
@@ -360,7 +445,7 @@ GameObject:
   - component: {fileID: 5914657578509917471}
   - component: {fileID: 5661126019376758678}
   - component: {fileID: 2300880212602173339}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: GetFoolet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -953,7 +1038,7 @@ ParticleSystem:
         m_RotationOrder: 4
     randomizeRotationDirection: 0
     gravitySource: 1
-    maxNumParticles: 150
+    maxNumParticles: 250
     customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 0
     rotation3D: 0
@@ -5215,7 +5300,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1935596901
-  m_SortingLayer: 5
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_RenderMode: 0
   m_MeshDistribution: 0
@@ -5258,7 +5343,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1391436307970792157}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: WallCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5291,7 +5376,7 @@ GameObject:
   - component: {fileID: 1978906266924115330}
   - component: {fileID: 5621782196391807864}
   - component: {fileID: 7796988035072978239}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: DoubleJumpBurst
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10146,7 +10231,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1935596901
-  m_SortingLayer: 5
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_RenderMode: 0
   m_MeshDistribution: 0
@@ -10189,7 +10274,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5630541058112753824}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Effects
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10230,7 +10315,7 @@ GameObject:
   - component: {fileID: 7972092676652763084}
   - component: {fileID: 8013101732710524370}
   - component: {fileID: 3241541549556383104}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Character
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -10276,7 +10361,7 @@ MonoBehaviour:
   - 0.055
   - 0.13
   - 0.24
-  doubleJumpForce: 6.5
+  doubleJumpForce: 7.1
   maxJump: 1
   fallMinSpeed: -6
   fallBaseSpeed: -8
@@ -10284,14 +10369,14 @@ MonoBehaviour:
   baseGravity: 2
   gravityMultiplier: 1.75
   groundCheckPos: {fileID: 6114358535947880977}
-  groundCheckSize: {x: 0.6, y: 0.02}
-  groundCheckOffset: {x: 0, y: -0.85}
+  groundCheckSize: {x: 0.55, y: 0.02}
+  groundCheckOffset: {x: 0.12, y: -0.99}
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
   wallCheckPos: {fileID: 1391436307970792157}
   wallCheckSize: {x: 0.03, y: 0.6}
-  wallCheckOffset: {x: 0.38, y: -0.15}
+  wallCheckOffset: {x: 0.58, y: -0.15}
   wallLayer:
     serializedVersion: 2
     m_Bits: 8
@@ -10300,13 +10385,51 @@ MonoBehaviour:
   wallJumpDirection: 0
   wallJumpTime: 0.2
   wallJumpTimer: 0
+  minCorruption: -3
+  maxCorruption: 3
+  colorCorruption:
+    serializedVersion: 2
+    key0: {r: 0.5896226, g: 0.9689108, b: 1, a: 1}
+    key1: {r: 1, g: 0, b: 0.42857122, a: 1}
+    key2: {r: 0, g: 0, b: 0, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 13107
+    ctime1: 65535
+    ctime2: 0
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_ColorSpace: -1
+    m_NumColorKeys: 2
+    m_NumAlphaKeys: 2
+  damageEjectionPower: {x: 5, y: 5}
+  invulnerabilityTime: 1
+  damageTime: 0.5
   jumpEffects:
   - {fileID: 5621782196391807864}
-  getFooletEffects:
-  - {fileID: 5661126019376758678}
+  sprite: {fileID: 8901516272700346701}
+  lights:
+  - {fileID: 1495956339398803627}
+  - {fileID: 3401185468216797385}
+  getFooletEffects: {fileID: 5661126019376758678}
+  fooletMat: {fileID: 2100000, guid: 3e45e24c655c208438c8678982722f28, type: 2}
   animator: {fileID: 8013101732710524370}
   TMP: {fileID: 6782815589076833602}
-  imgGround: {fileID: 0}
   imgWall: {fileID: 0}
   horizontalMovement: 0
   verticalMovement: 0
@@ -10352,14 +10475,14 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1121291019
-  m_SortingLayer: 6
+  m_SortingLayer: 7
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 236c186b953af124c8f7c0997ad8e731, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 3ee18e83d20f5ef4a8fe56c8dde11695, type: 3}
+  m_Color: {r: 0.5801887, g: 0.96819615, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.2, y: 0.2}
+  m_Size: {x: 2, y: 2}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -10536,17 +10659,17 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: -0.22467428}
+  m_Offset: {x: 0.105320394, y: -0.16959727}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.675, y: 1.8125}
-    newSize: {x: 0.2, y: 0.2}
+    oldSize: {x: 2, y: 2}
+    newSize: {x: 2, y: 2}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.75, y: 1.2465285}
+  m_Size: {x: 0.9291637, y: 1.6228876}
   m_EdgeRadius: 0
 --- !u!95 &8013101732710524370
 Animator:
@@ -10596,7 +10719,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6114358535947880977}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: GroundCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10629,7 +10752,7 @@ GameObject:
   - component: {fileID: 42125213970883805}
   - component: {fileID: 4373282543367901420}
   - component: {fileID: 6782815589076833602}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: DebugText
   m_TagString: Untagged
   m_Icon: {fileID: 0}

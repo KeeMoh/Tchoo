@@ -1,36 +1,38 @@
 using DG.Tweening;
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class CorruptedSlider : MonoBehaviour
 {    
-    [SerializeField] private PlayerController controller;
+    [SerializeField] private PlayerControllerOLD controller;
     //[SerializeField] private Slider _sliderCorruption;
     //[SerializeField] private Slider _sliderSanity;
     //[SerializeField] private Slider[] _sliderSanity;    
     //[SerializeField] private Slider[] _sliderCorruption;
     [SerializeField] private Slider _slider;
     [SerializeField] private Image fillImg;
-    [SerializeField] private Sprite spriteSanity;
-    [SerializeField] private Sprite spriteCorruption;    
+    //[SerializeField] private Sprite spriteSanity;
+    //[SerializeField] private Sprite spriteCorruption;    
     [SerializeField] private Gradient gradientSanity;
     [SerializeField] private Gradient gradientCorruption;
+    [SerializeField] private TextMeshProUGUI debugCorruptionValue;
     //private Image imgCorruption;
     //private Image imgSanity;
     //[SerializeField] private ParticleSystem Fx_Activation;
 
-    [SerializeField] private Material _mat;
-    [SerializeField, Range(0, 3)] private float minIntensity;
-    [SerializeField, Range(0, 3)] private float maxIntensity;
+    //[SerializeField] private Material _mat;
+    //[SerializeField, Range(0, 3)] private float minIntensity;
+    //[SerializeField, Range(0, 3)] private float maxIntensity;
 
-    private float highIntensity;
-    private float lowIntensity;
-    //private Color highColor;
-    private float timePast = 0;
+    //private float highIntensity;
+    //private float lowIntensity;
+    ////private Color highColor;
+    //private float timePast = 0;
     private Gradient currentGradient;
-    private Color glowColor = new(191,191,191,0);
-    float intensity;
+    //private Color glowColor = new(191,191,191,0);
+    //float intensity;
 
     //private void Awake()
     //{
@@ -68,25 +70,28 @@ public class CorruptedSlider : MonoBehaviour
     private void Start()
     {
         controller.OnCorruptionValueChange += UpdateSlider;
-        fillImg.sprite = spriteSanity;
         currentGradient = gradientSanity;
     }
 
-    private void UpdateSlider(float value, bool transition)
+    private void UpdateSlider(float percent, bool transition)
     {
+        debugCorruptionValue.text = controller.CurrentCorruption.ToString();
+        float sliderValue = Mathf.Abs(percent - 0.5f) * 2;
         if (transition)
         {
             Debug.Log("SLIDER TRANSITION");
             ChangeSprite();
-            _slider.transform.DOShakePosition(2f, 50, 100, 90).OnComplete(() =>
+            _slider.transform.DOShakePosition(1f, 50, 100, 90).OnComplete(() =>
             {
-                _slider.DOValue(value, 0.5f);
-                _slider.transform.DOShakePosition(1.5f, 5, 15, 60);
+                _slider.DOValue(sliderValue, 0.5f);
+                fillImg.color = currentGradient.Evaluate(sliderValue);
+                _slider.transform.DOShakePosition(0.5f, 5, 15, 60);
             });
             return;
         }
-        _slider.DOValue(value, 0.5f);
-        _slider.transform.DOShakePosition(1.5f, 5, 15, 60);
+        _slider.DOValue(sliderValue, 0.5f);
+        fillImg.color = currentGradient.Evaluate(sliderValue);
+        _slider.transform.DOShakePosition(0.5f, 5, 15, 60);
         //slider.value = value;
         //_slider.fillRect.anchorMin = new Vector2(_slider.handleRect.anchorMin.x, 0.5f);
         //_slider.fillRect.anchorMax = new Vector2(0.5f, 1);
@@ -120,12 +125,10 @@ public class CorruptedSlider : MonoBehaviour
         if(currentGradient == gradientSanity)
         {
             currentGradient = gradientCorruption;
-            fillImg.color = currentGradient.Evaluate(0.5f);
         }
         else
         {
             currentGradient = gradientSanity;
-            fillImg.color = currentGradient.Evaluate(0.5f);
         }
     }
 

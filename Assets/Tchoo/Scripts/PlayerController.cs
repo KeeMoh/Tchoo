@@ -1,10 +1,7 @@
 using DG.Tweening;
 using NaughtyAttributes;
 using System;
-using System.Collections;
-using System.ComponentModel;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering.Universal;
@@ -16,9 +13,10 @@ public class PlayerController : MonoBehaviour
     [Header("Move")]
     [SerializeField] private float moveSpeed;
     [Header("Jump")]
-    [Description("time Max pressed for the jumpForce corresponding")]
     [SerializeField] private float jumpForce;
-    [SerializeField] private float[] timeToPressJump;
+    [SerializeField] private float[] jumpHoldDurations;    
+    [SerializeField] private float[] minimunJumpForceForDurations;
+    [SerializeField, Range(0, 1)] private float decelerationValue;
     [Header("Double Jump")]
     [SerializeField] private float doubleJumpForce;
     [SerializeField] private int maxJump;
@@ -52,6 +50,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float maxCorruption;
     [SerializeField] private Gradient colorCorruption;
     private float currentCorruption = 0f;
+    public float CurrentCorruption => currentCorruption;
+    [Header("Damages")]
+    [SerializeField] private Vector2 damageEjectionPower = new(3f, 3f);
+    [SerializeField] private float invulnerabilityTime = 1f;
+    [SerializeField] private float damageTime = 0.5f;
+    private float _invulnerabilityTimer = 0;
+    private float _damageTimer = 0;
 
     [Header("Effects")]
     [SerializeField] private ParticleSystem[] jumpEffects;
@@ -62,48 +67,64 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Animator animator;
 
     [Header("Debug")]
-    [SerializeField] private TextMeshPro TMP;
-    [SerializeField] private Image imgGround;
+    [SerializeField] private TextMeshPro debugText;
+    //[SerializeField] private Image imgGround;
     [SerializeField] private Image imgWall;
     private Color debugColor = new(0f, 0f, 0f, 0f);
 
     bool isWallJumping;
+    //bool isInvulnerable = false;
 
     public event Action<float, bool> OnCorruptionValueChange;
+    public event Action<float> OnDirectionXChange;
+    public event Action<float> OnDirectionYChange;
     //[SerializeField] private bool isWallSliding;
 
     public float horizontalMovement;
     public float verticalMovement;
     private float jumpPressedTime;
-    private bool isFirstJumpPressed;
+    private float jumpPressedTimeDelta;
+    private bool isHoldingJump;
     private bool isFacingRight = true;
     private float timeSinceGrounded = 0f;
     private float timeAllowedForJump = 0.22f;
     private bool isCorrupted = false;
+    private bool isInFirstJumpAscent = false;
+    private bool endFirstJump = false;
+    private float jumpMaxPressTime;
 
     private void Start()
     {
+        jumpMaxPressTime = jumpHoldDurations[jumpHoldDurations.Length - 1];
+        Debug.Log(jumpMaxPressTime.ToString());
         sprite.color = colorCorruption.Evaluate(0f);
-        foreach(var item in lights)
+        foreach (var item in lights)
         {
             item.color = colorCorruption.Evaluate(0f);
         }
         currentCorruption = minCorruption;
+        UpdateCorruption(false);
     }
 
     void Update()
     {
         if (IsGrounded()) jumpRemaining = maxJump;
         processWallJump();
-        ProcessGravity();
-
-        if(!isWallJumping)
+        ProcessDamage();
+        //if (IsGrounded()) jumpRemaining = maxJump;
+        //processWallJump();
+        //ProcessGravity();
+        if (!isWallJumping && _damageTimer <= 0)
         {
-            UpdateMovement();
-            Flip();
+            //UpdateMovement();
+            if (isFacingRight && horizontalMovement < 0 || !isFacingRight && horizontalMovement > 0)
+            {
+                Flip();
+            }
         }
         animator.SetFloat("yVelocity", rb.linearVelocityY);
         animator.SetFloat("magnitude", rb.linearVelocity.magnitude);
+        animator.SetFloat("WalkSpeed", Mathf.Abs(horizontalMovement));
     }
 
     private void UpdateMovement()
@@ -114,54 +135,122 @@ public class PlayerController : MonoBehaviour
             : Mathf.Clamp(rb.linearVelocityY, GetFallSpeed(), jumpForce);
     }
 
+    public void SwitchSettings(JumpSettings settings)
+    {
+        jumpForce = settings.JumpForce;
+        jumpHoldDurations = settings.JumpHoldDurations;
+        minimunJumpForceForDurations = settings.MinimumJumpForceForDurations;
+        baseGravity = settings.BaseGravity;
+        gravityMultiplier = settings.GravityMultiplier;
+        decelerationValue = settings.DecelerationValue;
+    }
+
+    private void ProcessDamage()
+    {
+        if (_invulnerabilityTimer > 0)
+        {
+            _invulnerabilityTimer -= Time.deltaTime;
+        }
+        if (_damageTimer > 0)
+        {
+            _damageTimer -= Time.deltaTime;
+        }
+
+    }
+
     [Button]
     private void GainCorruption()
     {
         GainCorruption(0.5f);
-    }    
+    }
+
     [Button]
     private void GainSanity()
     {
         GainSanity(0.5f);
     }
+
+    public void TakeDamage(float amount, Vector2 from)
+    {
+        if (_invulnerabilityTimer > 0)
+        {
+            Debug.Log("isInvunerable : can't take dmg");
+            return;
+        }
+        float direction;
+        if (from.x > transform.position.x) direction = -1; 
+        else direction = 1;
+        
+        rb.linearVelocity = new Vector2(direction * damageEjectionPower.x, damageEjectionPower.y);
+         
+        GainCorruption(amount);
+        _damageTimer += damageTime;
+        _invulnerabilityTimer += invulnerabilityTime;
+    }
+
     public void GainCorruption(float corruptionValue)
     {
-        bool switchState = false;
-        if (currentCorruption == 0 && !isCorrupted)
+        if (_invulnerabilityTimer > 0)
         {
-            isCorrupted = true;
-            switchState = true;
+            Debug.Log("isInvunerable : can't take dmg");
+            return;
         }
+        Debug.Log("GainCorruption");
+        bool switchState = false;
         
         currentCorruption = Mathf.Min(currentCorruption + corruptionValue, maxCorruption);
 
-        if (!isCorrupted && currentCorruption > 0) currentCorruption = 0;
-        //Changer pour valeur entre 0 et 1
-        float range = maxCorruption - minCorruption;
-        float delta = currentCorruption - minCorruption;
-        float percentage = delta / range;
-        sprite.DOColor(colorCorruption.Evaluate(percentage), 0.5f);
-        OnCorruptionValueChange?.Invoke(Mathf.Abs(currentCorruption / maxCorruption), switchState);
+        if (!isCorrupted && currentCorruption >= 0)
+        {
+            currentCorruption = 0;
+            isCorrupted = true;
+            switchState = true;
+            SetInvunerability(2f);
+        }
+        UpdateCorruption(switchState);
     }
+
     public void GainSanity(float sanityValue)
     {
+        Debug.Log("GainSanity");
         bool switchState = false;
-        if (currentCorruption == 0 && isCorrupted)
-        {
-            isCorrupted = false;
-            switchState = true;
-        }
 
         currentCorruption = Mathf.Max(currentCorruption - sanityValue, minCorruption);
-        
-        if (isCorrupted && currentCorruption < 0) currentCorruption = 0;
+
+        if (isCorrupted && currentCorruption <= 0)
+        {
+            currentCorruption = 0;
+            isCorrupted = false;
+            switchState = true;
+            SetInvunerability(2f);
+        }
+        UpdateCorruption(switchState);
+    }
+
+    private void UpdateCorruption(bool switchState)
+    {
         float range = maxCorruption - minCorruption;
         float delta = currentCorruption - minCorruption;
         float percentage = delta / range;
-        
-        sprite.DOColor(colorCorruption.Evaluate(percentage), 0.5f);
-        OnCorruptionValueChange?.Invoke(Mathf.Abs(currentCorruption / maxCorruption), switchState);
+        OnCorruptionValueChange?.Invoke(percentage, switchState);
+        sprite.DOColor(colorCorruption.Evaluate(1), 0.05f).OnComplete(() =>
+        sprite.DOColor(colorCorruption.Evaluate(percentage), 0.45f).SetEase(Ease.InSine)
+        );
     }
+
+    private void SetInvunerability(float amount)
+    {
+        _invulnerabilityTimer += amount;
+    }
+
+    //private IEnumerator Invulnerability(float time)
+    //{
+    //    Debug.Log("Start coroutine invulnerability : " + time);
+    //    isInvulnerable = true;
+    //    yield return new WaitForSeconds(time);
+    //    isInvulnerable = false;
+    //    Debug.Log("End coroutine invulnerability");
+    //}
 
     public void CollectFoolet(Color color)
     {
@@ -209,7 +298,6 @@ public class PlayerController : MonoBehaviour
     
     public void Jump(InputAction.CallbackContext context)
     {
-
         //Wall Jump
         if (context.performed)
         {
@@ -225,11 +313,7 @@ public class PlayerController : MonoBehaviour
                 //forceFlip
                 if (transform.localScale.x != wallJumpDirection)
                 {
-                    isFacingRight = !isFacingRight;
-                    Vector3 ls = transform.localScale;
-                    ls.x *= -1f;
-                    transform.localScale = ls;
-                    wallCheckOffset.x *= -1f;
+                    Flip();
                 }
 
                 Invoke(nameof(cancelWallJump), wallJumpTime);
@@ -237,11 +321,14 @@ public class PlayerController : MonoBehaviour
             }
             if (IsGrounded() || (timeSinceGrounded < timeAllowedForJump && jumpRemaining == maxJump))
             {
+                Debug.Log("-------- start Jump --------");
                 rb.linearVelocityY = jumpForce;
-                isFirstJumpPressed = true;
+                isHoldingJump = true;
                 animator.SetTrigger("jump");
                 StopAllCoroutines();
-                StartCoroutine(handleFirstJumpTime());
+                jumpPressedTime = 0;
+                jumpPressedTimeDelta = 0;
+                isInFirstJumpAscent = true;
                 jumpRemaining--;
                 return;
             }
@@ -262,7 +349,9 @@ public class PlayerController : MonoBehaviour
         
         if (context.canceled && rb.linearVelocityY > 0)
         {
-            isFirstJumpPressed = false; // Stop coroutine with this bool
+            isHoldingJump = false; // Stop coroutine with this bool
+            Debug.Log("--- jumpPressedTime onStop --- " + jumpPressedTime);
+            jumpPressedTimeDelta = 0;
         }
 
 
@@ -271,14 +360,20 @@ public class PlayerController : MonoBehaviour
 
     private void ProcessGravity()
     {
+        //Lower gravity when end jumping;
+        if (endFirstJump)
+        {
+            rb.gravityScale = baseGravity / gravityMultiplier;
+            return;
+        }
+        //Higher gravity when falling
         if (rb.linearVelocityY < -0.75f)
         {
             rb.gravityScale = baseGravity * gravityMultiplier;
+            return;
         }
-        else
-        {
-            rb.gravityScale = baseGravity;
-        }
+        //Otherwise, set as default value
+        rb.gravityScale = baseGravity;
     }
 
     private bool isWallSliding()
@@ -310,56 +405,165 @@ public class PlayerController : MonoBehaviour
         isWallJumping = false;
     }
 
-    private IEnumerator handleFirstJumpTime()
+    private void FixedUpdate()
     {
-        float jumpMaxPressTime = timeToPressJump[timeToPressJump.Length-1];
-        jumpPressedTime = 0;
-        while (isFirstJumpPressed)
+        if (!isWallJumping && _damageTimer <= 0)
         {
-            jumpPressedTime += Time.deltaTime;
-            if(jumpPressedTime >= jumpMaxPressTime)
-            {
-                isFirstJumpPressed = false;
-                TMP.text = (timeToPressJump.Length+1).ToString();
-                yield return new WaitForSeconds(0.5f);
-                TMP.text = "";
-                yield break;
-            }
-            yield return null;
+            UpdateMovement();
         }
-        if(jumpPressedTime < jumpMaxPressTime)
+
+        if (isInFirstJumpAscent)
         {
-            for(int i = 0; i < timeToPressJump.Length; i++)
-            {
-                if (jumpPressedTime < timeToPressJump[i])
-                {
-                    TMP.text = (i+1).ToString();
-                    yield return new WaitForSeconds(timeToPressJump[i] - jumpPressedTime);
-                    StartCoroutine(stopPositiveVelocityY());
-                    yield break;
-                }
-            }
-            Debug.LogError($"/! JumpPressTime = {jumpPressedTime} & jumpPressTimeMax = {jumpMaxPressTime}, but the coroutine didnt do the condition to wait /!");
+            HandleFirstJump();
         }
-        yield return null;
+
+        if (endFirstJump) 
+        {
+            HandleEndJump();
+        }
+        ProcessGravity();
     }
 
-    private IEnumerator stopPositiveVelocityY()
+    /// Increment timer while the jump button is pressed to define which step of #jumpHoldDurations the character reaches
+    private void HandleFirstJump()
     {
-        while (rb.linearVelocityY > 0.1f)
+        //Clamp minimum velocity based on minimunJumpForceForDurations values
+        for (int i = 0; i < jumpHoldDurations.Length; i++)
         {
-            rb.linearVelocityY = Mathf.Min(Mathf.Lerp(rb.linearVelocityY, 0f, 0.15f),jumpForce/2);
-            yield return null;
+            if (jumpPressedTime + jumpPressedTimeDelta < jumpHoldDurations[i])
+            {
+                if (rb.linearVelocityY > Mathf.Epsilon && minimunJumpForceForDurations.Length > i)
+                {
+                    rb.linearVelocityY = Mathf.Max(rb.linearVelocityY, minimunJumpForceForDurations[i]);
+                }
+
+                Debug.Log("VelocityY => " + rb.linearVelocityY +
+                    " | pressedTime => " + jumpPressedTime +
+                    " | Delta => " + jumpPressedTimeDelta +
+                    " | Jump n°" + (i + 1).ToString()
+                    );
+
+                break;
+            }
         }
-        rb.linearVelocityY = 0;
-        yield return new WaitForSeconds(0.3f);
-        TMP.text = "";
+
+        if (isHoldingJump)
+        {
+            jumpPressedTime += Time.fixedDeltaTime;
+            //If holding time reach the maximum
+            if (jumpPressedTime >= jumpHoldDurations[jumpHoldDurations.Length-1])
+            {
+                //Force Jump button released
+                isHoldingJump = false;
+                jumpPressedTimeDelta = 0;
+                isInFirstJumpAscent = false;
+                debugText.text = jumpHoldDurations.Length.ToString();
+                endFirstJump = true;
+            }
+        }
+        else
+        {
+            HoldUntilNextStepOfJump();
+        }
     }
+
+    ///Simulate holding the jump button until next level of Jump Height timer
+    private void HoldUntilNextStepOfJump()
+    {
+        for (int i = 0; i < jumpHoldDurations.Length; i++)
+        {
+            //Find the next jump height level
+            if (jumpPressedTime < jumpHoldDurations[i])
+            {
+                debugText.text = (i + 1).ToString();
+                jumpPressedTimeDelta += Time.fixedDeltaTime;
+                if (jumpPressedTime + jumpPressedTimeDelta >= jumpHoldDurations[i])
+                {
+                    isInFirstJumpAscent = false;
+                    endFirstJump = true;
+                }
+                break;
+            }
+        }
+    }
+
+    ///Decelerate if the character is still ascending
+    private void HandleEndJump()
+    {
+        if (rb.linearVelocityY > Mathf.Epsilon)
+        {
+            rb.linearVelocityY = Mathf.Min(Mathf.Lerp(rb.linearVelocityY, 0f, decelerationValue), jumpForce / 2f);
+            Debug.Log("deceleration velocity : " + rb.linearVelocityY.ToString());
+        }
+        else
+        {
+            Debug.Log("end deceleration velocity : " + rb.linearVelocityY.ToString());
+            if (rb.linearVelocityY > -0.5f) rb.linearVelocityY = 0;
+            Debug.Log("end deceleration velocity : " + rb.linearVelocityY.ToString());
+            endFirstJump = false;
+        }
+    }
+
+    //private IEnumerator handleFirstJumpTimeOLD()
+    //{
+
+    //    jumpPressedTime = 0;
+    //    while (isFirstJumpPressed)
+    //    {
+    //        jumpPressedTime += Time.deltaTime;
+    //        if(jumpPressedTime >= jumpMaxPressTime)
+    //        {
+    //            isFirstJumpPressed = false;
+    //            TMP.text = timeToPressJump.Length.ToString();
+    //            StartCoroutine(stopPositiveVelocityY());
+    //            yield return new WaitForSeconds(0.5f);
+    //            TMP.text = "";
+    //            yield break;
+    //        }
+    //        yield return null;
+    //    }
+    //    if(jumpPressedTime < jumpMaxPressTime)
+    //    {
+    //        for(int i = 0; i < timeToPressJump.Length; i++)
+    //        {
+    //            if (jumpPressedTime < timeToPressJump[i])
+    //            {
+    //                TMP.text = (i+1).ToString();
+    //                Debug.Log("---");
+    //                Debug.Log((i + 1).ToString());
+    //                Debug.Log(jumpPressedTime);
+    //                //yield return new WaitForFixedUpdate();
+    //                yield return new WaitForSeconds(timeToPressJump[i] - jumpPressedTime);
+    //                StartCoroutine(stopPositiveVelocityY());
+    //                yield break;
+    //            }
+    //        }
+    //        Debug.LogError($"/! JumpPressTime = {jumpPressedTime} & jumpPressTimeMax = {jumpMaxPressTime}, but the coroutine didnt do the condition to wait /!");
+    //    }
+    //    yield return null;
+    //}
+
+    //private IEnumerator stopPositiveVelocityYOLD()
+    //{
+    //    Debug.LogWarning("position Y when stop => " + transform.position.y);
+    //    while (rb.linearVelocityY > 0.1f)
+    //    {
+    //        rb.linearVelocityY = Mathf.Min(Mathf.MoveTowards(rb.linearVelocityY, 0f, 0.09f * Time.deltaTime),jumpForce/2f);
+    //        yield return null;
+    //    }
+    //    rb.linearVelocityY = 0;
+    //    yield return new WaitForSeconds(0.3f);
+    //    debugText.text = "";
+    //}
 
     private bool IsGrounded()
     {
         if (Physics2D.OverlapBox(groundCheckPos.position + (Vector3)groundCheckOffset, groundCheckSize, 0, groundLayer))
         {
+            //if(timeSinceGrounded > 0)
+            //{
+            //    OnDirectionYChange?.Invoke(1f);
+            //}
             timeSinceGrounded = 0;
             return true;
         }
@@ -374,23 +578,22 @@ public class PlayerController : MonoBehaviour
     {
         if (Physics2D.OverlapBox(wallCheckPos.position + (Vector3)wallCheckOffset, wallCheckSize, 0, wallLayer))
         {
-            imgWall.color = Color.blue;
+            //imgWall.color = Color.blue;
             return true;
         }
-        imgWall.color = debugColor;
+        //imgWall.color = debugColor;
         return false;
     }
 
     private void Flip()
     {
-        if(isFacingRight && horizontalMovement <0 || !isFacingRight && horizontalMovement > 0)
-        {
-            isFacingRight = !isFacingRight;
-            Vector3 ls = transform.localScale;
-            ls.x *= -1f;
-            transform.localScale = ls;
-            wallCheckOffset.x *= -1f;
-        }
+        isFacingRight = !isFacingRight;
+        Vector3 ls = transform.localScale;
+        ls.x *= -1f;
+        transform.localScale = ls;
+        wallCheckOffset.x *= -1f;
+        groundCheckOffset.x *= -1f;
+        OnDirectionXChange?.Invoke(ls.x);
     }
 
     private float GetFallSpeed()
@@ -401,6 +604,7 @@ public class PlayerController : MonoBehaviour
         }
         if (verticalMovement < -0.4f)
         {
+            //OnDirectionYChange?.Invoke(-1f);
             return fallMaxSpeed;
         }
         return fallBaseSpeed;

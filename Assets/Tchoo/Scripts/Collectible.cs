@@ -11,7 +11,7 @@ public class Collectible : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.TryGetComponent(out PlayerController player))
+        if (collision.TryGetComponent(out PlayerControllerOLD player))
         {
             player.CollectFoolet(material.GetColor("_GlowColor"));
             Destroy(gameObject);
