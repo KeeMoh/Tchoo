@@ -9,8 +9,14 @@ EditorBuildSettings:
     path: Assets/Tchoo/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 1
-    path: Assets/Tchoo/Scenes/Level_0.unity
+    path: Assets/Tchoo/Scenes/Level0.unity
     guid: bf20b370c92abbb4189098beeee9dfb0
+  - enabled: 1
+    path: Assets/Tchoo/Scenes/LevelTuto.unity
+    guid: f1f859bd68c6a2f42bbbebd7e59125df
+  - enabled: 1
+    path: Assets/Tchoo/Scenes/Level1.unity
+    guid: 5185bdf9976596a408e177d778dc7c6b
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

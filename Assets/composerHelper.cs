@@ -7,13 +7,13 @@ public class ComposerHelper : MonoBehaviour
     [SerializeField] private float offSetYBase = 1.5f;
     [SerializeField] private float offSetYFactor = 1f;
     [SerializeField] private float MaxOffSetY = -3f;
-    private PlayerControllerOLD target;
+    private PlayerController target;
     private CinemachinePositionComposer composer;
 
     void Start()
     {
         composer = GetComponent<CinemachinePositionComposer>();
-        target = composer.FollowTarget.GetComponent<PlayerControllerOLD>();
+        target = composer.FollowTarget.GetComponent<PlayerController>();
         target.OnDirectionXChange += AdjustCameraXOffset;
         target.OnDirectionYChange += AdjustCameraYOffset;
 
