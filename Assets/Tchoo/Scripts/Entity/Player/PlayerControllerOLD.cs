@@ -90,6 +90,7 @@ public class PlayerControllerOLD : MonoBehaviour
     private bool isCorrupted = false;
     private bool isInFirstJumpAscent = false;
     private bool endFirstJump = false;
+    private bool wallJumpIsActive = false;
     float jumpMaxPressTime;
 
     private void Start()
@@ -107,7 +108,7 @@ public class PlayerControllerOLD : MonoBehaviour
     void Update()
     {
         if (IsGrounded()) jumpRemaining = maxJump;
-        processWallJump();
+        if(wallJumpIsActive) processWallJump();
         ProcessGravity();
         ProcessDamage();
 
@@ -246,12 +247,25 @@ public class PlayerControllerOLD : MonoBehaviour
     //    Debug.Log("End coroutine invulnerability");
     //}
 
-    public void CollectFoolet(Color color)
+    public void CollectFoolet(Color color, Power power)
     {
-        maxJump++;
         fooletMat.SetColor("_GlowColor", color);
         getFooletEffects.Play();
         GainCorruption(0.75f);
+        if(power == Power.DoubleJump)
+        {
+            maxJump++;
+        }
+        if(power == Power.WallJump)
+        {
+            wallJumpIsActive = true;
+        }
+    }
+
+    public void ResetPower()
+    {
+        maxJump = 1;
+        wallJumpIsActive = false;
     }
 
     public void Move(InputAction.CallbackContext context)
@@ -295,7 +309,7 @@ public class PlayerControllerOLD : MonoBehaviour
         //Wall Jump
         if (context.performed)
         {
-            if (isWallSliding() && wallJumpTimer > 0f)
+            if (isWallSliding() && wallJumpTimer > 0f && wallJumpIsActive)
             {
                 Debug.Log("WallJump");
                 isWallJumping = true;

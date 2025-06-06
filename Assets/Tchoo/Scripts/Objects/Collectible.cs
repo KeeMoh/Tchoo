@@ -2,20 +2,29 @@ using UnityEngine;
 
 public class Collectible : MonoBehaviour
 {
-    private Material material;
+    private Color materialColor;
+    private Color baseColor;
+    [SerializeField] private Power power;
 
     private void Start()
     {
-        material = GetComponentInChildren<ParticleSystemRenderer>().material;
+        materialColor = GetComponentInChildren<ParticleSystemRenderer>().material.GetColor("_GlowColor");
+        baseColor = GetComponentInChildren<ParticleSystem>().startColor;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.TryGetComponent(out PlayerControllerOLD player))
+        if (collision.TryGetComponent(out PlayerController player))
         {
-            player.CollectFoolet(material.GetColor("_GlowColor"));
+            player.CollectFoolet(baseColor, materialColor, power);
             Destroy(gameObject);
         }
     }
 
+}
+
+public enum Power{
+    DoubleJump,
+    WallJump,
+    End
 }

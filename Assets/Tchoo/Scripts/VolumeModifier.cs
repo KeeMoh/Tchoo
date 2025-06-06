@@ -12,7 +12,7 @@ public class VolumeModifier : MonoBehaviour
     //[SerializeField] private TextureCurve textureCurve1;
     //[SerializeField] private TextureCurve textureCurve2;
     //[SerializeField] private TextureCurve textureCurve3;
-    PlayerControllerOLD controller;
+    PlayerController controller;
 
     private ColorCurves colorCurves;
     private Vignette vignette;
@@ -40,7 +40,7 @@ public class VolumeModifier : MonoBehaviour
         //vignette = GetComponent<Vignette>();
         //colorCurves = GetComponent<ColorCurves>();
         //controller = FindAnyObjectByType<PlayerController>();
-        controller = FindAnyObjectByType<PlayerControllerOLD>();
+        controller = FindAnyObjectByType<PlayerController>();
         Debug.Log("Get controller from volume : controller corruption => " + controller.CurrentCorruption);
         controller.OnCorruptionValueChange += UpdateVolumeSettings;
     }
@@ -75,19 +75,17 @@ public class VolumeModifier : MonoBehaviour
 
     private void ResetColorCurve()
     {
+        Debug.Log("Reset curve");
+        // RESET HUE VS SAT to a neutral flat curve
         OverrideColorCurve(new Keyframe[] { new(0f, 0.5f), new(1f, 0.5f) });
     }
 
     private void OverrideColorCurve(Keyframe[] keys)
     {
-
-        Debug.Log("Reset curve");
-        // RESET HUE VS SAT to a neutral flat curve
-
         Vector2 bounds = new Vector2(0f, 1f); // Assuming 0–1 range is standard for hue
-        var resetCurve = new TextureCurve(keys, 0f, false, bounds);
+        var newCurve = new TextureCurve(keys, 0f, false, bounds);
 
-        colorCurves.hueVsSat.Override(resetCurve);
+        colorCurves.hueVsSat.Override(newCurve);
     }
 
     private void OnDisable()

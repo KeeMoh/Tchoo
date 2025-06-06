@@ -1,12 +1,16 @@
 using Unity.Cinemachine;
 using UnityEngine;
+using DG.Tweening;
+using System.Collections;
 
 public class ComposerHelper : MonoBehaviour
 {
     [SerializeField] private float offSetXFactor = 2f;
     [SerializeField] private float offSetYBase = 1.5f;
     [SerializeField] private float offSetYFactor = 1f;
-    [SerializeField] private float MaxOffSetY = -3f;
+    [SerializeField] private float secondsToWait = 0.2f;
+    [SerializeField] private float stepOffset = 0.5f;
+    //[SerializeField] private float MaxOffSetY = -3f;
     private PlayerController target;
     private CinemachinePositionComposer composer;
 
@@ -25,18 +29,41 @@ public class ComposerHelper : MonoBehaviour
     {
         composer.TargetOffset.x = direction * offSetXFactor;
     }    
-    
+
     void AdjustCameraYOffset(float direction)
     {
+        StopAllCoroutines();
         if (direction < 0)
         {
-            composer.TargetOffset.y = Mathf.Max(direction * offSetYFactor, MaxOffSetY);
+            StartCoroutine(LerpOffsetY(direction * offSetYFactor));
         }
         else
         {
-            composer.TargetOffset.y = offSetYBase;
+            StartCoroutine(LerpOffsetY(offSetYBase));
         }
     }
+
+    IEnumerator LerpOffsetY(float target)
+    {
+        while(composer.TargetOffset.y != target)
+        {
+            composer.TargetOffset.y = Mathf.MoveTowards(composer.TargetOffset.y, target, stepOffset);
+            yield return new WaitForSeconds(secondsToWait);
+        }
+    }
+
+    //IEnumerator LerpOffsetX(float target)
+    //{
+    //    composer.TargetOffset.x = Mathf.MoveTowards(composer.TargetOffset.x, target, 0.5f);
+    //    if(composer.TargetOffset.x == target )
+    //    {
+    //        yield return null;
+    //    }
+    //    else
+    //    {
+    //        yield return new WaitForSeconds(secondsToWait);
+    //    }
+    //}
 
     //void LateUpdate()
     //{

@@ -1,9 +1,7 @@
 using DG.Tweening;
 using NaughtyAttributes;
 using System;
-using System.Collections;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering.Universal;
@@ -62,18 +60,23 @@ public class PlayerController : MonoBehaviour
 
     [Header("Effects")]
     [SerializeField] private ParticleSystem[] jumpEffects;
+    [SerializeField] private ParticleSystem wallJumpEffect;
+    [SerializeField] private ParticleSystem landingEffect;
     [SerializeField] private SpriteRenderer sprite;
     [SerializeField] private Light2D[] lights;
     [SerializeField] private ParticleSystem getFooletEffects;
     [SerializeField] private ParticleSystem getHitEffect;
     [SerializeField] private Material fooletMat;
     [SerializeField] private Animator animator;
+    [SerializeField] private Image imageWallJump;
+    [SerializeField] private Image imageDoubleJump;
+    [SerializeField] private Image imageEnd;
 
     [Header("Debuging")]
     [SerializeField] private TextMeshPro debugText;
     //[SerializeField] private Image imgGround;
     [SerializeField] private Image imgWall;
-    [SerializeField] private CanvasGroup canvasGroup;
+    [SerializeField] private PauseMenu pauseMenu;
     private Color debugColor = new(0f, 0f, 0f, 0f);
 
     bool isWallJumping;
@@ -85,6 +88,7 @@ public class PlayerController : MonoBehaviour
     public event Action<float> OnDirectionYChange;
     //[SerializeField] private bool isWallSliding;
 
+    private bool updateCameraDown = false;
     public float horizontalMovement;
     public float verticalMovement;
     private float jumpPressedTime;
@@ -92,10 +96,14 @@ public class PlayerController : MonoBehaviour
     private bool isHoldingJump;
     private bool isFacingRight = true;
     private float timeSinceGrounded = 0f;
-    private float timeAllowedForJump = 0.22f;
+    private float timeSinceJumpPressed = 0f;
+    private bool hasJustPressedJump = false;
+    private float timeAllowedForCoyoteJump = 0.22f;
+    private float timeAllowedForPreJump = 0.12f;
     private bool isCorrupted = false;
     private bool isInFirstJumpAscent = false;
     private bool endFirstJump = false;
+    private bool wallJumpIsActive = false;
     private float jumpMaxPressTime;
     [SerializeField, Range(0.05f, 2f)] private float turnSpeed = 0.25f;
 
@@ -116,7 +124,25 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         if (IsGrounded()) jumpRemaining = maxJump;
-        processWallJump();
+        if (hasJustPressedJump) { 
+            timeSinceJumpPressed += Time.deltaTime;
+            Debug.Log("ProcessJump since : " + timeSinceJumpPressed.ToString());
+            if (timeSinceJumpPressed <= timeAllowedForPreJump)
+            {
+                if (IsGrounded() && rb.linearVelocityY > -0.01f)
+                {
+                    ProcessJump();
+                    hasJustPressedJump = false;
+                    timeSinceJumpPressed = 0f;
+                }
+            }
+            else
+            {
+                hasJustPressedJump = false;
+                timeSinceJumpPressed = 0f;
+            }
+        }
+        if(wallJumpIsActive) processWallJump();
         ProcessDamage();
         //if (IsGrounded()) jumpRemaining = maxJump;
         //processWallJump();
@@ -164,6 +190,24 @@ public class PlayerController : MonoBehaviour
         rb.linearVelocityY = isWallSliding() 
             ? Mathf.Clamp(rb.linearVelocityY, wallSlideSpeed*-1f, jumpForce) 
             : Mathf.Clamp(rb.linearVelocityY, GetFallSpeed(), jumpForce);
+        CheckFallingSpeed();
+    }
+
+    private void CheckFallingSpeed()
+    {
+        if(updateCameraDown && rb.linearVelocityY > -0.01f)
+        {
+            updateCameraDown = false;
+            OnDirectionYChange?.Invoke(1);
+            Debug.Log("DIRECTION CHANGE : POSITIVE");
+        }
+        else if(!updateCameraDown && rb.linearVelocityY < fallMinSpeed) 
+        { 
+            updateCameraDown = true;
+            OnDirectionYChange?.Invoke(-1);
+            Debug.Log("DIRECTION CHANGE : NEGATIVE");
+
+        }
     }
 
     public void SwitchSettings(JumpSettings settings)
@@ -171,7 +215,7 @@ public class PlayerController : MonoBehaviour
         jumpForce = settings.JumpForce;
         jumpHoldDurations = settings.JumpHoldDurations;
         minimunJumpForceForDurations = settings.MinimumJumpForceForDurations;
-        baseGravity = settings.BaseGravity;
+        //baseGravity = settings.BaseGravity;
         gravityMultiplier = settings.GravityMultiplier;
         decelerationValue = settings.DecelerationValue;
     }
@@ -291,12 +335,58 @@ public class PlayerController : MonoBehaviour
     //    Debug.Log("End coroutine invulnerability");
     //}
 
-    public void CollectFoolet(Color color)
+    public void CollectFoolet(Color baseColor, Color glowColor, Power power)
     {
-        maxJump++;
-        fooletMat.SetColor("_GlowColor", color);
+        fooletMat.SetColor("_GlowColor", glowColor);
+        getFooletEffects.startColor = baseColor;
         getFooletEffects.Play();
-        GainCorruption(0.75f);
+        GainCorruption(0.5f);
+        if (power == Power.DoubleJump)
+        {
+            maxJump++;
+            imageDoubleJump.gameObject.SetActive(true);
+            imageDoubleJump.transform.DOScale(3, 0.3f).OnComplete(() => { 
+                imageDoubleJump.transform.DOScale(1, 1.5f).SetEase(Ease.OutCubic);
+                imageDoubleJump.DOFade(1, 1.5f);
+            });
+
+
+        }
+        if (power == Power.WallJump)
+        {
+            wallJumpIsActive = true;
+            imageWallJump.gameObject.SetActive(true);
+            imageWallJump.transform.DOScale(3, 0.3f).OnComplete(() => {
+                imageWallJump.transform.DOScale(1, 1.5f).SetEase(Ease.OutCubic);
+                imageWallJump.DOFade(1, 1.5f);
+            });
+        }
+        if (power == Power.End)
+        {
+            imageEnd.gameObject.SetActive(true);
+            imageEnd.transform.DOScale(3, 0.3f).OnComplete(() => {
+                imageEnd.transform.DOScale(1, 1.5f).SetEase(Ease.OutCubic);
+                imageEnd.DOFade(1, 1.5f);
+            });
+        }
+    }
+
+    private void PlayLandingEffect()
+    {
+        landingEffect.Play();
+    }
+
+    public void ResetPower()
+    {
+        //Provisoire, gagne en sanité pour éviter que la corruption soit visible
+        GainSanity(2);
+        //Reset
+        maxJump = 1;
+        wallJumpIsActive = false;
+        //Enlève l'image avec un fade out
+        imageDoubleJump.DOFade(0, 1f).OnComplete(() => { imageDoubleJump.gameObject.SetActive(false); });
+        imageWallJump.DOFade(0,1f).OnComplete(() => { imageWallJump.gameObject.SetActive(false); });
+        imageEnd.DOFade(0,1f).OnComplete(() => { imageEnd.gameObject.SetActive(false); });
     }
 
     public void Move(InputAction.CallbackContext context)
@@ -351,54 +441,11 @@ public class PlayerController : MonoBehaviour
         //Wall Jump
         if (context.performed)
         {
-            if(isWallSliding() && wallJumpTimer > 0f)
-            {
-                Debug.Log("WallJump");
-                isWallJumping = true;
-                rb.linearVelocity = new Vector2(wallJumpDirection * wallJumpPower.x, wallJumpPower.y);
-                animator.SetTrigger("jump");
-
-                wallJumpTimer = 0f;
-
-                //forceFlip
-                if (transform.localScale.x != wallJumpDirection)
-                {
-                    Flip();
-                }
-
-                Invoke(nameof(cancelWallJump), wallJumpTime);
-                return;
-            }
-            if (IsGrounded() || (timeSinceGrounded < timeAllowedForJump && jumpRemaining == maxJump))
-            {
-                Debug.Log("-------- start Jump --------");
-                rb.linearVelocityY = jumpForce;
-                isHoldingJump = true;
-                animator.SetTrigger("jump");
-                StopAllCoroutines();
-                jumpPressedTime = 0;
-                jumpPressedTimeDelta = 0;
-                isInFirstJumpAscent = true;
-                jumpRemaining--;
-                return;
-            }
-            if(jumpRemaining > 0)
-            {
-                if (jumpRemaining == maxJump) jumpRemaining--;
-                if (jumpRemaining == 0) return;
-                animator.SetTrigger("jump");
-                rb.linearVelocityY = doubleJumpForce;
-                foreach (var effect in jumpEffects)
-                {
-                    effect.Play();
-                }
-                jumpRemaining--;
-                return;
-            }
-
+            isHoldingJump = true;
+            ProcessJump();
         }
         
-        if (context.canceled && rb.linearVelocityY > 0)
+        if (context.canceled)
         {
             isHoldingJump = false; // Stop coroutine with this bool
             Debug.Log("--- jumpPressedTime onStop --- " + jumpPressedTime);
@@ -408,6 +455,74 @@ public class PlayerController : MonoBehaviour
 
 
     }
+
+    private void ProcessJump()
+    {
+        Debug.Log("PROCESS JUMP");
+
+        if (isWallSliding() && wallJumpTimer > 0f && wallJumpIsActive)
+        {
+            Debug.Log("WallJump");
+            isWallJumping = true;
+
+            //reset first jump logic
+            isInFirstJumpAscent = false;
+            endFirstJump = false;
+
+            rb.linearVelocity = new Vector2(wallJumpDirection * wallJumpPower.x, wallJumpPower.y);
+            animator.SetTrigger("jump");
+            wallJumpEffect.Play();
+
+            wallJumpTimer = 0f;
+
+            //forceFlip
+            if (transform.localScale.x != wallJumpDirection)
+            {
+                Flip();
+            }
+
+            //Regain double jumps
+            jumpRemaining = maxJump - 1;
+            
+            Invoke(nameof(cancelWallJump), wallJumpTime);
+            return;
+        }
+        if (IsGrounded() || (timeSinceGrounded < timeAllowedForCoyoteJump && jumpRemaining == maxJump))
+        {
+            Debug.Log("-------- start Jump --------");
+            rb.linearVelocityY = jumpForce;
+            //isHoldingJump = true;
+            animator.SetTrigger("jump");
+            StopAllCoroutines();
+            jumpPressedTime = 0;
+            jumpPressedTimeDelta = 0;
+            isInFirstJumpAscent = true;
+            jumpRemaining--;
+            return;
+        }
+        if (jumpRemaining > 0)
+        {
+            if (jumpRemaining == maxJump) jumpRemaining--;
+            if (jumpRemaining != 0)
+            {
+                //reset first jump logic
+                isInFirstJumpAscent = false;
+                endFirstJump = false;
+
+                animator.SetTrigger("jump");
+                rb.linearVelocityY = doubleJumpForce;
+                foreach (var effect in jumpEffects)
+                {
+                    effect.Play();
+                }
+                jumpRemaining--;
+                return;
+            }
+        }
+        Debug.Log("Cant jump right now, try to process soon...");
+        hasJustPressedJump = true;
+    }
+    
 
     private void ProcessGravity()
     {
@@ -478,7 +593,7 @@ public class PlayerController : MonoBehaviour
                 break;
             }
         }
-
+        Debug.Log("isHoldingJump ? " + isHoldingJump);
         if (isHoldingJump)
         {
             jumpPressedTime += Time.fixedDeltaTime;
@@ -502,6 +617,7 @@ public class PlayerController : MonoBehaviour
     ///Simulate holding the jump button until next level of Jump Height timer
     private void HoldUntilNextStepOfJump()
     {
+        Debug.Log("HoldUntilNextStep");
         for (int i = 0; i < jumpHoldDurations.Length; i++)
         {
             //Find the next jump height level
@@ -590,10 +706,9 @@ public class PlayerController : MonoBehaviour
 
     public void OpenMenu(InputAction.CallbackContext context)
     {
-        canvasGroup.alpha = 1;
-        canvasGroup.interactable = true;
-        canvasGroup.blocksRaycasts = true;
-        Time.timeScale = 0f;
+        //if (!context.performed) return;
+        //Time.timeScale = 0f;
+        pauseMenu.PauseGame();
     }
     //public void CloseMenu(InputAction.CallbackContext context)
     //{
@@ -608,10 +723,16 @@ public class PlayerController : MonoBehaviour
     {
         if (Physics2D.OverlapBox(groundCheckPos.position + (Vector3)groundCheckOffset, groundCheckSize, 0, groundLayer))
         {
-            //if(timeSinceGrounded > 0)
-            //{
-            //    OnDirectionYChange?.Invoke(1f);
-            //}
+            if (Mathf.Abs(rb.linearVelocityY) > Mathf.Epsilon)
+            {
+                //IsGrounded but still in the air, velocity != 0
+                return false;
+            }
+            if (timeSinceGrounded > 0.4f)
+            {
+                Debug.Log("Play particles : " + timeSinceGrounded);
+                PlayLandingEffect();
+            }
             timeSinceGrounded = 0;
             return true;
         }
@@ -662,11 +783,14 @@ public class PlayerController : MonoBehaviour
         transform.localScale = ls;
         wallCheckOffset.x *= -1f;
         groundCheckOffset.x *= -1f;
-    }
-
-    private void ChangeCameraDirection() {
+        debugText.transform.localScale = ls;
+        wallJumpEffect.transform.localScale = ls;
         OnDirectionXChange?.Invoke(transform.localScale.x);
     }
+
+    //private void ChangeCameraDirection() {
+    //    OnDirectionXChange?.Invoke(transform.localScale.x);
+    //}
 
     private float GetFallSpeed()
     {

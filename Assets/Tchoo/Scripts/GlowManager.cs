@@ -7,7 +7,7 @@ public class GlowManager : MonoBehaviour
 
     void Update()
     {
-        float timePast = Time.time;
+        float timePast = Time.unscaledTime;
         for (int i = 0; i < glowElements.Length; i++)
         {
             float delta = timePast * 0.1f * glowElements[i].Speed % 1;

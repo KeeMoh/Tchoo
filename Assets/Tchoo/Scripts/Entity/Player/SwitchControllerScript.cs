@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using TMPro;
 using UnityEngine;
@@ -15,6 +16,9 @@ public class SwitchControllerScript : MonoBehaviour
     private void Start()
     {
         playerController.SwitchSettings(settings[settingsIndex]);
+        debugInfo.text = "mode n°" + (settingsIndex + 1).ToString();
+        debugInfo.transform.DOScale(1.3f, 0.25f).OnComplete(() => debugInfo.transform.DOScale(1, 0.25f));
+        debugInfo.DOColor(Color.red, 0.25f).OnComplete(() => debugInfo.DOColor(Color.white, 0.25f));
     }
     public void SwitchNextController(InputAction.CallbackContext context)
     {
@@ -35,14 +39,19 @@ public class SwitchControllerScript : MonoBehaviour
     {
         settingsIndex = (settingsIndex + 1) % settings.Length;
         playerController.SwitchSettings(settings[settingsIndex]);
-        debugInfo.text = "settings number " + (settingsIndex+1).ToString();
+        debugInfo.text = "mode n°" + (settingsIndex+1).ToString();
+        debugInfo.transform.DOScale(1.3f, 0.25f).OnComplete(() => debugInfo.transform.DOScale(1, 0.25f));
+        debugInfo.DOColor(Color.red, 0.25f).OnComplete(() => debugInfo.DOColor(Color.white, 0.25f));
     }    
     
     private void switchPreviousIndex()
     {
         settingsIndex = (settingsIndex - 1) % settings.Length;
+
         playerController.SwitchSettings(settings[settingsIndex]);
-        debugInfo.text = "settings number " + (settingsIndex+1).ToString();
+        debugInfo.text = "mode n°" + (settingsIndex+1).ToString();
+        debugInfo.transform.DOScale(1.3f, 0.25f).OnComplete(() => debugInfo.transform.DOScale(1, 0.25f));
+        debugInfo.DOColor(Color.red, 0.25f).OnComplete(() => debugInfo.DOColor(Color.white, 0.25f));
     }
 
     //public void Move(InputAction.CallbackContext context)
@@ -79,7 +88,7 @@ public struct JumpSettings
     public float JumpForce;
     public float[] JumpHoldDurations;
     public float[] MinimumJumpForceForDurations;
-    public float BaseGravity;
+    //public float BaseGravity;
     public float GravityMultiplier;
     [Range(0, 1)] public float DecelerationValue;
     //public bool clampVelocityForDurations;
