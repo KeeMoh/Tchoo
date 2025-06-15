@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 0e2cfb560649ba94f99d99b06734ac7a
+guid: fe9b745ac6e61144591bb1e40bc63878
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -48,7 +48,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 325
+  spritePixelsToUnits: 512
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -136,7 +136,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: attack_0
+      name: corruptedBarForeground_0
       rect:
         serializedVersion: 2
         x: 0
@@ -151,14 +151,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8f51808d50526824787872e8d235cfde
-      internalID: 1654655691
+      spriteID: 687dba471674e614eb4e3e0cd0d5d416
+      internalID: 2120789940
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: attack_1
+      name: corruptedBarForeground_1
       rect:
         serializedVersion: 2
         x: 512
@@ -173,14 +173,58 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 465f1b7d505b34542a9342973a8421c6
-      internalID: 1939231184
+      spriteID: 3ea82fb5a3ca6824f8041690f861ae6d
+      internalID: -319901551
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: attack_2
+      name: corruptedBarForeground_2
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 1536
+        width: 512
+        height: 512
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6d6dff80ba81c9244af139fb5e004a66
+      internalID: -1688693836
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: corruptedBarForeground_3
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 1536
+        width: 512
+        height: 512
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1ea761751ce15be489ffb6aa43e9e9cc
+      internalID: 921138016
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: corruptedBarForeground_4
       rect:
         serializedVersion: 2
         x: 0
@@ -195,14 +239,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b7695787d848f1543b4e742e0dd74844
-      internalID: -1390315339
+      spriteID: c61cee5e6ba330a4bb6db84e53740c1d
+      internalID: 1390043152
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: attack_3
+      name: corruptedBarForeground_5
       rect:
         serializedVersion: 2
         x: 512
@@ -217,14 +261,58 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2c4dce145569a8146a656f9b55122365
-      internalID: 535229684
+      spriteID: a3d44957bcae890498e108352a09c719
+      internalID: 1857635166
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: attack_4
+      name: corruptedBarForeground_6
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 1024
+        width: 512
+        height: 512
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ebeacb9c3e41aa64594d9208064e8ee4
+      internalID: 1942799588
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: corruptedBarForeground_7
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 1024
+        width: 512
+        height: 512
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cd868e68098b5754db856562147d1047
+      internalID: -1405771588
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: corruptedBarForeground_8
       rect:
         serializedVersion: 2
         x: 0
@@ -239,14 +327,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 935727b8ccbf8a74f9f8ed47c5b84bf0
-      internalID: 1147101790
+      spriteID: abd5561652c79c9438144b7783c290bb
+      internalID: -1487461520
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: attack_5
+      name: corruptedBarForeground_9
       rect:
         serializedVersion: 2
         x: 512
@@ -261,8 +349,30 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9424f500deb08b9449402ca28639da5f
-      internalID: 384809492
+      spriteID: 5a4eedb06c6b49543a97c7f8363bc155
+      internalID: 1004229019
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: corruptedBarForeground_10
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 512
+        width: 512
+        height: 512
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4247ffee21b38604da0d7c94975d0d46
+      internalID: -1390446914
       vertices: []
       indices: 
       edges: []
@@ -271,7 +381,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 528a3fcab7dd2bf45be87d00336a4f84
+    spriteID: b61ded5814c2392439336e4ff387b9c5
     internalID: 0
     vertices: []
     indices: 
@@ -281,12 +391,17 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      attack_0: 1654655691
-      attack_1: 1939231184
-      attack_2: -1390315339
-      attack_3: 535229684
-      attack_4: 1147101790
-      attack_5: 384809492
+      corruptedBarForeground_0: 2120789940
+      corruptedBarForeground_1: -319901551
+      corruptedBarForeground_10: -1390446914
+      corruptedBarForeground_2: -1688693836
+      corruptedBarForeground_3: 921138016
+      corruptedBarForeground_4: 1390043152
+      corruptedBarForeground_5: 1857635166
+      corruptedBarForeground_6: 1942799588
+      corruptedBarForeground_7: -1405771588
+      corruptedBarForeground_8: -1487461520
+      corruptedBarForeground_9: 1004229019
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

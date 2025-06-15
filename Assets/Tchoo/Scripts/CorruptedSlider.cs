@@ -1,135 +1,153 @@
 using DG.Tweening;
-using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using TMPro;
+using Unity.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class CorruptedSlider : MonoBehaviour
 {    
     [SerializeField] private PlayerControllerOLD controller;
-    //[SerializeField] private Slider _sliderCorruption;
-    //[SerializeField] private Slider _sliderSanity;
-    //[SerializeField] private Slider[] _sliderSanity;    
-    //[SerializeField] private Slider[] _sliderCorruption;
-    [SerializeField] private Slider _slider;
-    [SerializeField] private Image fillImg;
-    //[SerializeField] private Sprite spriteSanity;
-    //[SerializeField] private Sprite spriteCorruption;    
-    [SerializeField] private Gradient gradientSanity;
-    [SerializeField] private Gradient gradientCorruption;
+    [SerializeField] private Slider _sliderHead;
+    [SerializeField] private SliderCorruptionElement[] _sliderArray;
     [SerializeField] private TextMeshProUGUI debugCorruptionValue;
-    //private Image imgCorruption;
-    //private Image imgSanity;
-    //[SerializeField] private ParticleSystem Fx_Activation;
 
-    //[SerializeField] private Material _mat;
-    //[SerializeField, Range(0, 3)] private float minIntensity;
-    //[SerializeField, Range(0, 3)] private float maxIntensity;
+    private List<SliderCorruptionElement> sliderPositiveList = new();
+    private List<SliderCorruptionElement> sliderNegativeList = new();
 
-    //private float highIntensity;
-    //private float lowIntensity;
-    ////private Color highColor;
-    //private float timePast = 0;
-    private Gradient currentGradient;
-    //private Color glowColor = new(191,191,191,0);
-    //float intensity;
-
-    //private void Awake()
-    //{
-    //    //baseColor = _mat.GetColor("_GlowColor");
-    //    lowIntensity = minIntensity;// Mathf.Pow(2, minIntensity);
-    //    //lowIntensity = new Color(baseColor.r * factor, baseColor.g * factor, baseColor.b * factor, 0);
-    //    highIntensity = maxIntensity; // Mathf.Pow(2, maxIntensity);
-    //    Debug.Log("highIntensity : " + lowIntensity + " " + highIntensity);
-    //    _mat.SetColor("_GlowColor", glowColor * 0);
-    //    //highColor = new Color(baseColor.r * factor, baseColor.g * factor, baseColor.b * factor, 0);
-    //}
-
-    // Update is called once per frame
-    //void Update()
-    //{
-    //    timePast += Time.deltaTime;
-    //    float delta = timePast * 0.2f % 1;
-        
-    //    //Debug.Log(timePast * 0.1f % 1);
-    //    if (delta < 0.5f)
-    //    {
-    //        intensity = Mathf.Lerp(lowIntensity, highIntensity, delta);
-    //    }
-    //    else
-    //    {
-    //        intensity = Mathf.Lerp(highIntensity, lowIntensity, delta);
-    //    }
-        
-    //    //fillImg.color = currentGradient.Evaluate(delta);
-    //    _mat.SetColor("_GlowColor", new Color(glowColor.r * intensity, glowColor.g * intensity, glowColor.b * intensity, 0));
-
-    //    //_mat.color = gradient.Evaluate(timePast * 0.1f % 1);
-    //}
 
     private void Start()
     {
         controller.OnCorruptionValueChange += UpdateSlider;
-        currentGradient = gradientSanity;
+        AssignSliderLists();
+        ReorderSliderLists();
     }
 
-    private void UpdateSlider(float percent, bool transition)
+    private void AssignSliderLists()
     {
-        debugCorruptionValue.text = controller.CurrentCorruption.ToString();
-        float sliderValue = Mathf.Abs(percent - 0.5f) * 2;
-        if (transition)
+        sliderPositiveList.Clear();
+        sliderNegativeList.Clear();
+        foreach (var slider in _sliderArray)
         {
-            Debug.Log("SLIDER TRANSITION");
-            ChangeSprite();
-            _slider.transform.DOShakePosition(1f, 50, 100, 90).OnComplete(() =>
+            if(slider.IsPositive)
             {
-                _slider.DOValue(sliderValue, 0.5f);
-                fillImg.color = currentGradient.Evaluate(sliderValue);
-                _slider.transform.DOShakePosition(0.5f, 5, 15, 60);
-            });
-            return;
+                sliderPositiveList.Add(slider);
+                Debug.Log("Slider (+) : index > " + slider.Index);
+
+            }
+            else
+            {
+                sliderNegativeList.Add(slider);
+                Debug.Log("Slider (-) : index > " + slider.Index);
+
+            }
         }
-        _slider.DOValue(sliderValue, 0.5f);
-        fillImg.color = currentGradient.Evaluate(sliderValue);
-        _slider.transform.DOShakePosition(0.5f, 5, 15, 60);
-        //slider.value = value;
-        //_slider.fillRect.anchorMin = new Vector2(_slider.handleRect.anchorMin.x, 0.5f);
-        //_slider.fillRect.anchorMax = new Vector2(0.5f, 1);
-        //if (value > 0f)
-        //{
-        //    DesactiveSlider(_sliderSanity);
-        //    ActiveSlider(_sliderCorruption);
-        //    _sliderCorruption.DOValue(value, 1.5f);
-        //    _sliderCorruption.transform.DOShakePosition(1.5f, 50, 100, 90);
-        //}
-        //else
-        //{
-        //    value *= -1f;
-        //    DesactiveSlider(_sliderCorruption);
-        //    ActiveSlider(_sliderSanity);
-
-        //    _sliderSanity.DOValue(value, 1.5f);
-        //    _sliderSanity.transform.DOShakePosition(1.5f, 30, 60, 60);
-        //}
-
-        //_slider.value = value;
-        //_slider.DOValue(value, 1.5f);
-        //StartCoroutine(adjustValue(value, 0.5f));
-
-        //imgCorruption.color = color;
-        //imgSanity.color = color;
     }
 
-    private void ChangeSprite()
+    public float UnlockSliderElements(int countToUnlock)
     {
-        if(currentGradient == gradientSanity)
+        int unlocked = 0;
+        float totalUnlockedValue = 0f;
+
+        List<SliderCorruptionElement> lockedElements = _sliderArray
+            .OrderBy(slider => slider.Index)
+            .ToList();
+
+        foreach (SliderCorruptionElement element in lockedElements)
         {
-            currentGradient = gradientCorruption;
+            if (unlocked >= countToUnlock) break;
+
+            element.SetUnlocked(true);
+            totalUnlockedValue += element.Value;
+            unlocked++;
+        }
+
+        return totalUnlockedValue;
+    }
+
+    private void ReorderSliderLists()
+    {
+        sliderNegativeList.OrderBy(slider => slider.Index).ToList();
+
+        foreach(var slider in sliderNegativeList)
+        {
+                Debug.Log("Slider negativ : index > " + slider.Index);
+        }
+
+        sliderPositiveList.OrderBy(slider => slider.Index).ToList();
+
+        foreach (var slider in sliderPositiveList)
+        {
+                Debug.Log("Slider positiv : index > " + slider.Index);
+        }
+
+    }
+
+    public void UpdateSlider(float targetValue, bool transition)
+    {
+        float totalDuration = 1f;
+        if ( targetValue > 0)
+        {
+            ClearOppositeList(sliderNegativeList);
+            AnimateSliders(sliderPositiveList, targetValue, totalDuration);
         }
         else
         {
-            currentGradient = gradientSanity;
+            ClearOppositeList(sliderPositiveList);
+            AnimateSliders(sliderNegativeList, targetValue, totalDuration);
         }
+    }
+
+    private void ClearOppositeList(List<SliderCorruptionElement> oppositeList)
+    {
+        // STEP 1: Clear the opposite list first (if needed)
+        foreach (var slider in oppositeList)
+        {
+            if (slider.SetSliderValueWithTween(0f, 0.3f) != null) // Optional fixed unfill time
+            {
+                slider.SetSliderValueWithTween(0f, 0.3f);
+            }
+        }
+    }
+
+    private void AnimateSliders(List<SliderCorruptionElement> activeList, float targetValue, float totalDuration)
+    {
+        float absTarget = Mathf.Abs(targetValue);
+        float weightedTotal = CalculateTotalFillAmount(activeList, absTarget);
+        // STEP 3: Animate each slider with its proportional share of the total duration
+        float remaining = absTarget;
+        float elapsedDelay = 0f;
+        foreach (var slider in activeList)
+        {
+            float share = slider.Value * 3f;
+            float fill = Mathf.Clamp01(Mathf.Min(share, remaining) / share);
+
+            float segmentValue = Mathf.Min(share, remaining);
+            float duration = (segmentValue / weightedTotal) * totalDuration;
+
+            slider.SetSliderValueWithTween(fill, duration)
+                  .SetDelay(elapsedDelay)
+                  .SetEase(Ease.OutQuad);
+
+            elapsedDelay += duration;
+            remaining -= share;
+            if (remaining <= 0f) break;
+        }
+    }
+
+    private float CalculateTotalFillAmount(List<SliderCorruptionElement> activeList, float absTarget)
+    {
+        // STEP 2: Calculate total weighted fill needed
+        float weightedTotal = 0f;
+        foreach (var slider in activeList)
+        {
+            float slice = Mathf.Min(slider.Value * 3f, absTarget);
+            weightedTotal += slice;
+            absTarget -= slice;
+            if (absTarget <= 0f) break;
+        }
+        return weightedTotal;
     }
 
     private void OnDisable()
@@ -138,35 +156,3 @@ public class CorruptedSlider : MonoBehaviour
         controller.OnCorruptionValueChange -= UpdateSlider;
     }
 }
-//using UnityEngine;
-//using UnityEngine.UI;
-
-
-//public class SliderSwitcher : MonoBehaviour
-//{
-//    private Slider _slider;
-
-//    void Awake()
-//    {
-//        _slider = GetComponent<Slider>();
-//    }
-
-//    void Update()
-//    {
-//        UpdateSliderSense();
-//    }
-
-//    public void UpdateSliderSense()
-//    {
-//        if (_slider.value > 0)
-//        {
-//            _slider.fillRect.anchorMin = new Vector2(0.5f, 0);
-//            _slider.fillRect.anchorMax = new Vector2(_slider.handleRect.anchorMin.x, 1);
-//        }
-//        else
-//        {
-//            _slider.fillRect.anchorMin = new Vector2(_slider.handleRect.anchorMin.x, 0);
-//            _slider.fillRect.anchorMax = new Vector2(0.5f, 1);
-//        }
-//    }
-//}

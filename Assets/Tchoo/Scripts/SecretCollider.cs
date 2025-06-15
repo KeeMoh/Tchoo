@@ -8,12 +8,20 @@ public class SecretCollider : MonoBehaviour
     [SerializeField] private Tilemap tilemap;
     [SerializeField] private float updateInterval = 0.05f;
     [SerializeField] private float fadeAmount = 0.02f;
-
+    [SerializeField] private float targetAmount = 0.05f;
+    [SerializeField] private bool isVisible = true;
 
     private void Start()
     {
         Color tmp = tilemap.color;
-        tmp.a = 1;
+        if(isVisible)
+        {
+            tmp.a = 1;
+        }
+        else
+        {
+            tmp.a = 0;
+        }
         tilemap.color = tmp;
     }
 
@@ -22,7 +30,14 @@ public class SecretCollider : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             StopAllCoroutines();
-            StartCoroutine(FadeIn());
+            if(isVisible)
+            {
+                StartCoroutine(FadeOut());
+            }
+            else
+            {
+                StartCoroutine(FadeIn());
+            }
         }
     }
 
@@ -31,18 +46,25 @@ public class SecretCollider : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             StopAllCoroutines();
-            StartCoroutine(FadeOut());
+            if (isVisible)
+            {
+                StartCoroutine(FadeIn());
+            }
+            else
+            {
+                StartCoroutine(FadeOut());
+            }
         }
     }
 
-    private IEnumerator FadeIn()
+    private IEnumerator FadeOut()
     {
         Debug.Log("FadeIn Secret");
         float alphaVal = tilemap.color.a;
         Color tmp = tilemap.color;
         
 
-        while (tilemap.color.a > 0.05f)
+        while (tilemap.color.a > targetAmount)
         {
             alphaVal -= fadeAmount;
             tmp.a = alphaVal;
@@ -52,7 +74,7 @@ public class SecretCollider : MonoBehaviour
         }
     }
 
-    private IEnumerator FadeOut()
+    private IEnumerator FadeIn()
     {
         Debug.Log("FadeOut Secret");
 

@@ -81,6 +81,17 @@
             "bindings": [
                 {
                     "name": "",
+                    "id": "9ca568bc-1e64-43c7-aa0f-95dacec9c094",
+                    "path": "<SwitchProControllerHID>/leftStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "978bfe49-cc26-4a3d-ab7b-7d7a29327403",
                     "path": "<Gamepad>/leftStick",
                     "interactions": "",
@@ -246,6 +257,17 @@
                 },
                 {
                     "name": "",
+                    "id": "13b74425-6585-4c46-8af4-3b913bbb09c6",
+                    "path": "<SwitchProControllerHID>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "0cfc07eb-681a-4c79-ae08-a0e3ee4135a9",
                     "path": "<Keyboard>/space",
                     "interactions": "",
@@ -263,6 +285,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a2995cb3-95f1-4def-a9f1-0e285eb554e9",
+                    "path": "<SwitchProControllerHID>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "NextSetting",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -296,6 +329,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "NextSetting",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "36948591-bbe8-4d41-98ed-e4a718720d7b",
+                    "path": "<SwitchProControllerHID>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PreviousSetting",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

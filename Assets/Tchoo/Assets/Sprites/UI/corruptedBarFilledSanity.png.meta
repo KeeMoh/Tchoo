@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 0e2cfb560649ba94f99d99b06734ac7a
+guid: 4f7cfb8e8b499364b973a47049e81a0b
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -48,7 +48,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 325
+  spritePixelsToUnits: 512
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -136,7 +136,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: attack_0
+      name: corruptedBarFilledSanity_0
       rect:
         serializedVersion: 2
         x: 0
@@ -151,14 +151,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8f51808d50526824787872e8d235cfde
-      internalID: 1654655691
+      spriteID: c5d9b51da46253f47a16b8ad0ed98ada
+      internalID: 891396117
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: attack_1
+      name: corruptedBarFilledSanity_1
       rect:
         serializedVersion: 2
         x: 512
@@ -173,14 +173,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 465f1b7d505b34542a9342973a8421c6
-      internalID: 1939231184
+      spriteID: 5758200189a9b4049ab93d5e33a87019
+      internalID: 274163455
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: attack_2
+      name: corruptedBarFilledSanity_2
       rect:
         serializedVersion: 2
         x: 0
@@ -195,14 +195,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b7695787d848f1543b4e742e0dd74844
-      internalID: -1390315339
+      spriteID: b773b9a7497a5b74db298aa50b8061f5
+      internalID: -984476326
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: attack_3
+      name: corruptedBarFilledSanity_3
       rect:
         serializedVersion: 2
         x: 512
@@ -217,14 +217,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2c4dce145569a8146a656f9b55122365
-      internalID: 535229684
+      spriteID: a956604a80c24ee41abaf62e825fe0d1
+      internalID: 1281747647
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: attack_4
+      name: corruptedBarFilledSanity_4
       rect:
         serializedVersion: 2
         x: 0
@@ -239,14 +239,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 935727b8ccbf8a74f9f8ed47c5b84bf0
-      internalID: 1147101790
+      spriteID: 5d58cb764af1eff44936fe5ce345331c
+      internalID: -1899373409
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: attack_5
+      name: corruptedBarFilledSanity_5
       rect:
         serializedVersion: 2
         x: 512
@@ -261,8 +261,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9424f500deb08b9449402ca28639da5f
-      internalID: 384809492
+      spriteID: 7bdb53f99c0d15a4cbca8227c3dc575e
+      internalID: 281169234
       vertices: []
       indices: 
       edges: []
@@ -271,7 +271,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 528a3fcab7dd2bf45be87d00336a4f84
+    spriteID: e7922b20d7046f14f84f3fbec2e0db0f
     internalID: 0
     vertices: []
     indices: 
@@ -281,12 +281,12 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      attack_0: 1654655691
-      attack_1: 1939231184
-      attack_2: -1390315339
-      attack_3: 535229684
-      attack_4: 1147101790
-      attack_5: 384809492
+      corruptedBarFilledSanity_0: 891396117
+      corruptedBarFilledSanity_1: 274163455
+      corruptedBarFilledSanity_2: -984476326
+      corruptedBarFilledSanity_3: 1281747647
+      corruptedBarFilledSanity_4: -1899373409
+      corruptedBarFilledSanity_5: 281169234
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
