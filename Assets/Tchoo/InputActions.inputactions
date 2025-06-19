@@ -76,6 +76,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "UnlockSlider",
+                    "type": "Button",
+                    "id": "407070f5-1278-40eb-962d-f69325f5f0c4",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -439,6 +448,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Purify",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4432462e-fe4e-44a6-b0f0-fc918d64e5b3",
+                    "path": "<Gamepad>/dpad/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "UnlockSlider",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

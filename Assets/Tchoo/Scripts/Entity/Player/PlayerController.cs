@@ -74,22 +74,18 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Image imageWallJump;
     [SerializeField] private Image imageDoubleJump;
     [SerializeField] private Image imageEnd;
+    [SerializeField] private AnimationEffectTriggers animationEffect;
 
     [Header("Debuging")]
     [SerializeField] private TextMeshPro debugText;
-    //[SerializeField] private Image imgGround;
-    [SerializeField] private Image imgWall;
     [SerializeField] private PauseMenu pauseMenu;
-    private Color debugColor = new(0f, 0f, 0f, 0f);
 
     bool isWallJumping;
     bool isTurningOnGround = false;
-    //bool isInvulnerable = false;
 
     public event Action<float, bool> OnCorruptionValueChange;
     public event Action<float> OnDirectionXChange;
     public event Action<float> OnDirectionYChange;
-    //[SerializeField] private bool isWallSliding;
 
     private bool updateCameraDown = false;
     public float horizontalMovement;
@@ -107,7 +103,7 @@ public class PlayerController : MonoBehaviour
     private bool isInFirstJumpAscent = false;
     private bool endFirstJump = false;
     private bool wallJumpIsActive = false;
-    private float jumpMaxPressTime;
+
     [SerializeField, Range(0.05f, 2f)] private float turnSpeed = 0.25f;
 
     private void Start()
@@ -115,8 +111,6 @@ public class PlayerController : MonoBehaviour
         defaultJumpForce = jumpForce;
         defaultMoveSpeed = moveSpeed;
         defaultGravityMultiplier = gravityMultiplier;
-        jumpMaxPressTime = jumpHoldDurations[jumpHoldDurations.Length - 1];
-        Debug.Log(jumpMaxPressTime.ToString());
         sprite.color = colorCorruption.Evaluate(0f);
         foreach (var item in lights)
         {
@@ -124,7 +118,6 @@ public class PlayerController : MonoBehaviour
         }
         currentCorruption = minCorruption;
         UpdateCorruption(false, false);
-        //OnDirectionXChange += Flip;
     }
 
     void Update()
@@ -132,7 +125,7 @@ public class PlayerController : MonoBehaviour
         if (IsGrounded()) jumpRemaining = maxJump;
         if (hasJustPressedJump) { 
             timeSinceJumpPressed += Time.deltaTime;
-            Debug.Log("ProcessJump since : " + timeSinceJumpPressed.ToString());
+            //Debug.Log("ProcessJump since : " + timeSinceJumpPressed.ToString());
             if (timeSinceJumpPressed <= timeAllowedForPreJump)
             {
                 if (IsGrounded() && rb.linearVelocityY > -0.01f)
@@ -150,22 +143,15 @@ public class PlayerController : MonoBehaviour
         }
         if(wallJumpIsActive) processWallJump();
         ProcessDamage();
-        //if (IsGrounded()) jumpRemaining = maxJump;
-        //processWallJump();
-        //ProcessGravity();
         if (!isWallJumping && _damageTimer <= 0)
         {
-            //UpdateMovement();
             if (isFacingRight && horizontalMovement < -0.1f || !isFacingRight && horizontalMovement > 0.1f)
             {
-                //OnDirectionXChange?.Invoke(transform.localScale.x * -1);
                 Flip();
             }
         }
         animator.SetFloat("yVelocity", rb.linearVelocityY);
         animator.SetFloat("magnitude", rb.linearVelocity.magnitude);
-        //Debug.Log( rb.linearVelocity.magnitude);
-        //animator.SetFloat("WalkSpeed", Mathf.Abs(horizontalMovement));
     }
 
     private void FixedUpdate()
@@ -212,12 +198,12 @@ public class PlayerController : MonoBehaviour
         }
         else if (horizontalMovement < -0.55f)
         {
-            Debug.Log(horizontalMovement);
+            //Debug.Log(horizontalMovement);
             horizontalMovement = -1f;
         }
         else if (horizontalMovement < -0.1f)
         {
-            Debug.Log(horizontalMovement);
+            //Debug.Log(horizontalMovement);
             horizontalMovement = -0.4f;
         }
         else
@@ -238,7 +224,6 @@ public class PlayerController : MonoBehaviour
     }
     public void Jump(InputAction.CallbackContext context)
     {
-        //Wall Jump
         if (context.performed)
         {
             isHoldingJump = true;
@@ -251,9 +236,6 @@ public class PlayerController : MonoBehaviour
             Debug.Log("--- jumpPressedTime onStop --- " + jumpPressedTime);
             jumpPressedTimeDelta = 0;
         }
-
-
-
     }
 
     private void ProcessJump()
@@ -323,6 +305,11 @@ public class PlayerController : MonoBehaviour
         hasJustPressedJump = true;
     }
 
+    public void UpdateCorruptionRange(float min, float max)
+    {
+        minCorruption = min;
+        maxCorruption = max;
+    }
 
     private void ProcessGravity()
     {
@@ -385,16 +372,16 @@ public class PlayerController : MonoBehaviour
                     rb.linearVelocityY = Mathf.Max(rb.linearVelocityY, minimunJumpForceForDurations[i]);
                 }
 
-                Debug.Log("VelocityY => " + rb.linearVelocityY +
-                    " | pressedTime => " + jumpPressedTime +
-                    " | Delta => " + jumpPressedTimeDelta +
-                    " | Jump n°" + (i + 1).ToString()
-                    );
+                //Debug.Log("VelocityY => " + rb.linearVelocityY +
+                //    " | pressedTime => " + jumpPressedTime +
+                //    " | Delta => " + jumpPressedTimeDelta +
+                //    " | Jump n°" + (i + 1).ToString()
+                //    );
 
                 break;
             }
         }
-        Debug.Log("isHoldingJump ? " + isHoldingJump);
+        //Debug.Log("isHoldingJump ? " + isHoldingJump);
         if (isHoldingJump)
         {
             jumpPressedTime += Time.fixedDeltaTime;
@@ -418,7 +405,7 @@ public class PlayerController : MonoBehaviour
     ///Simulate holding the jump button until next level of Jump Height timer
     private void HoldUntilNextStepOfJump()
     {
-        Debug.Log("HoldUntilNextStep");
+        //Debug.Log("HoldUntilNextStep");
         for (int i = 0; i < jumpHoldDurations.Length; i++)
         {
             //Find the next jump height level
@@ -442,13 +429,13 @@ public class PlayerController : MonoBehaviour
         if (rb.linearVelocityY > Mathf.Epsilon)
         {
             rb.linearVelocityY = Mathf.Min(Mathf.Lerp(rb.linearVelocityY, 0f, decelerationValue), jumpForce / 2f);
-            Debug.Log("deceleration velocity : " + rb.linearVelocityY.ToString());
+            //Debug.Log("deceleration velocity : " + rb.linearVelocityY.ToString());
         }
         else
         {
-            Debug.Log("end deceleration velocity : " + rb.linearVelocityY.ToString());
+            //Debug.Log("end deceleration velocity : " + rb.linearVelocityY.ToString());
             if (rb.linearVelocityY > -0.5f) rb.linearVelocityY = 0;
-            Debug.Log("end deceleration velocity : " + rb.linearVelocityY.ToString());
+            //Debug.Log("end deceleration velocity : " + rb.linearVelocityY.ToString());
             endFirstJump = false;
         }
     }
@@ -459,13 +446,13 @@ public class PlayerController : MonoBehaviour
         {
             updateCameraDown = false;
             OnDirectionYChange?.Invoke(1);
-            Debug.Log("DIRECTION CHANGE : POSITIVE");
+            //Debug.Log("DIRECTION CHANGE : POSITIVE");
         }
         else if(!updateCameraDown && rb.linearVelocityY < fallMinSpeed) 
         { 
             updateCameraDown = true;
             OnDirectionYChange?.Invoke(-1);
-            Debug.Log("DIRECTION CHANGE : NEGATIVE");
+            //Debug.Log("DIRECTION CHANGE : NEGATIVE");
 
         }
     }
@@ -475,7 +462,6 @@ public class PlayerController : MonoBehaviour
         jumpForce = settings.JumpForce;
         jumpHoldDurations = settings.JumpHoldDurations;
         minimunJumpForceForDurations = settings.MinimumJumpForceForDurations;
-        //baseGravity = settings.BaseGravity;
         gravityMultiplier = settings.GravityMultiplier;
         decelerationValue = settings.DecelerationValue;
     }
@@ -484,13 +470,16 @@ public class PlayerController : MonoBehaviour
     {
         if (context.performed)
         {
-            animator.SetTrigger("Attack");
+            if (IsGrounded())
+            {
+                animator.SetTrigger("Attack");
+            }
         }
     }
 
     public void Purify(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        if (context.performed && IsGrounded())
         {
             animator.SetTrigger("Purify");
         }
@@ -498,19 +487,8 @@ public class PlayerController : MonoBehaviour
 
     public void StopMovement(int stop)
     {
-        //bool shouldStop = stop == 1;
-        if(stop == 1)
-        {
-            jumpForce = 0;
-            moveSpeed = 0;
-
-        }
-        else
-        {
-            jumpForce =  defaultJumpForce;
-            moveSpeed =  defaultMoveSpeed;
-        }
-
+        jumpForce = stop == 1 ? 0 : defaultJumpForce;
+        moveSpeed = stop == 1 ? 0 : defaultMoveSpeed;
     }
 
 
@@ -628,7 +606,7 @@ public class PlayerController : MonoBehaviour
         float range = maxCorruption - minCorruption;
         float delta = currentCorruption - minCorruption;
         float percentage = delta / range;
-        OnCorruptionValueChange?.Invoke(percentage, switchState);
+        OnCorruptionValueChange?.Invoke(currentCorruption, switchState);
         if (DoColor)
         {
             sprite.DOColor(colorCorruption.Evaluate(1), 0.05f).OnComplete(() =>
@@ -644,15 +622,6 @@ public class PlayerController : MonoBehaviour
     {
         _invulnerabilityTimer += amount;
     }
-
-    //private IEnumerator Invulnerability(float time)
-    //{
-    //    Debug.Log("Start coroutine invulnerability : " + time);
-    //    isInvulnerable = true;
-    //    yield return new WaitForSeconds(time);
-    //    isInvulnerable = false;
-    //    Debug.Log("End coroutine invulnerability");
-    //}
 
     public void CollectFoolet(Color baseColor, Color glowColor, Power power)
     {
@@ -720,71 +689,16 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    //private IEnumerator handleFirstJumpTimeOLD()
-    //{
-
-    //    jumpPressedTime = 0;
-    //    while (isFirstJumpPressed)
-    //    {
-    //        jumpPressedTime += Time.deltaTime;
-    //        if(jumpPressedTime >= jumpMaxPressTime)
-    //        {
-    //            isFirstJumpPressed = false;
-    //            TMP.text = timeToPressJump.Length.ToString();
-    //            StartCoroutine(stopPositiveVelocityY());
-    //            yield return new WaitForSeconds(0.5f);
-    //            TMP.text = "";
-    //            yield break;
-    //        }
-    //        yield return null;
-    //    }
-    //    if(jumpPressedTime < jumpMaxPressTime)
-    //    {
-    //        for(int i = 0; i < timeToPressJump.Length; i++)
-    //        {
-    //            if (jumpPressedTime < timeToPressJump[i])
-    //            {
-    //                TMP.text = (i+1).ToString();
-    //                Debug.Log("---");
-    //                Debug.Log((i + 1).ToString());
-    //                Debug.Log(jumpPressedTime);
-    //                //yield return new WaitForFixedUpdate();
-    //                yield return new WaitForSeconds(timeToPressJump[i] - jumpPressedTime);
-    //                StartCoroutine(stopPositiveVelocityY());
-    //                yield break;
-    //            }
-    //        }
-    //        Debug.LogError($"/! JumpPressTime = {jumpPressedTime} & jumpPressTimeMax = {jumpMaxPressTime}, but the coroutine didnt do the condition to wait /!");
-    //    }
-    //    yield return null;
-    //}
-
-    //private IEnumerator stopPositiveVelocityYOLD()
-    //{
-    //    Debug.LogWarning("position Y when stop => " + transform.position.y);
-    //    while (rb.linearVelocityY > 0.1f)
-    //    {
-    //        rb.linearVelocityY = Mathf.Min(Mathf.MoveTowards(rb.linearVelocityY, 0f, 0.09f * Time.deltaTime),jumpForce/2f);
-    //        yield return null;
-    //    }
-    //    rb.linearVelocityY = 0;
-    //    yield return new WaitForSeconds(0.3f);
-    //    debugText.text = "";
-    //}
-
     public void OpenMenu(InputAction.CallbackContext context)
     {
-        //if (!context.performed) return;
-        //Time.timeScale = 0f;
         pauseMenu.PauseGame();
     }
-    //public void CloseMenu(InputAction.CallbackContext context)
-    //{
-    //    canvasGroup.alpha = 0;
-    //    canvasGroup.interactable = false;
-    //    canvasGroup.blocksRaycasts = false;
-    //    Time.timeScale = 1f;
-    //}
+
+    private void PlayAnimationEffect(AnimationEffect effect)
+    {
+        Debug.Log("Play anim " + effect.ToString());
+        animationEffect.PlayAnim(effect);
+    }
 
 
     private bool IsGrounded()
@@ -815,10 +729,8 @@ public class PlayerController : MonoBehaviour
     {
         if (Physics2D.OverlapBox(wallCheckPos.position + (Vector3)wallCheckOffset, wallCheckSize, 0, wallLayer))
         {
-            //imgWall.color = Color.blue;
             return true;
         }
-        //imgWall.color = debugColor;
         return false;
     }
 
@@ -832,12 +744,6 @@ public class PlayerController : MonoBehaviour
         {
             EndFlip();
         }
-        //isFacingRight = !isFacingRight;
-        //Vector3 ls = transform.localScale;
-        //ls.x = direction;
-        //transform.localScale = ls;
-        //wallCheckOffset.x = direction;
-        //groundCheckOffset.x = direction;
     }
 
     /// <summary>
@@ -856,10 +762,6 @@ public class PlayerController : MonoBehaviour
         OnDirectionXChange?.Invoke(transform.localScale.x);
     }
 
-    //private void ChangeCameraDirection() {
-    //    OnDirectionXChange?.Invoke(transform.localScale.x);
-    //}
-
     private float GetFallSpeed()
     {
         if(verticalMovement > 0.4f)
@@ -868,7 +770,6 @@ public class PlayerController : MonoBehaviour
         }
         if (verticalMovement < -0.4f)
         {
-            //OnDirectionYChange?.Invoke(-1f);
             return fallMaxSpeed;
         }
         return fallBaseSpeed;

@@ -42,7 +42,7 @@ public class VolumeModifier : MonoBehaviour
         //controller = FindAnyObjectByType<PlayerController>();
         controller = FindAnyObjectByType<PlayerController>();
         Debug.Log("Get controller from volume : controller corruption => " + controller.CurrentCorruption);
-        controller.OnCorruptionValueChange += UpdateVolumeSettings;
+        controller.OnCorruptionValueChange += null; //UpdateVolumeSettings;
     }
 
     private void UpdateVolumeSettings(float corruptionPercent, bool switchState)

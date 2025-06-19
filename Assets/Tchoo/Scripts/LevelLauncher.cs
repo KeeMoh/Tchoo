@@ -21,7 +21,7 @@ public class LevelLauncher : MonoBehaviour
     private void Start()
     {
         levelManager = LevelManager.Instance;
-        if (levelManager?.ActiveConnection == null)
+        if (levelManager?.ActiveConnection == null && defaultSpawnPoint != null)
         {
             Debug.Log("Level launcher spawn at default position bcse activeconnection is null");
             levelManager.SpawnPlayerAtPoint(defaultSpawnPoint);

@@ -2,6 +2,7 @@ using NaughtyAttributes;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using static UnityEngine.Rendering.DebugUI;
 
 namespace sliderCorruption
@@ -10,6 +11,7 @@ namespace sliderCorruption
     {
         [SerializeField] private SliderCorruptionElement headSlider;
         [SerializeField] private List<SliderCorruptionElement> extraSliders;
+        [SerializeField] private PlayerController controller;
 
         private List<SliderCorruptionElement> unlockedSegments = new();
 
@@ -20,6 +22,7 @@ namespace sliderCorruption
         private void Start()
         {
             SetupInitialSlider();
+            controller.OnCorruptionValueChange += SetGlobalValue;
         }
 
         private void SetupInitialSlider()
@@ -35,9 +38,16 @@ namespace sliderCorruption
         {
             totalMin = unlockedSegments.Min(s => s.Min);
             totalMax = unlockedSegments.Max(s => s.Max);
+            controller.UpdateCorruptionRange(totalMin, totalMax);
         }
 
         public float GetTotalRange() => totalMax - totalMin;
+
+
+        public void UnlockNextSegment(InputAction.CallbackContext context)
+        {
+            if(context.performed) UnlockNextSegment();
+        }
 
         [Button]
         public void UnlockNextSegment()
@@ -94,7 +104,12 @@ namespace sliderCorruption
             SetGlobalValue(currentAmount - 0.25f, 0.6f);
         }
 
-        public void SetGlobalValue(float value, float duration = 0.3f)
+        public void SetGlobalValue(float value, bool switchState = false)
+        {
+            SetGlobalValue(-value, 0.3f);
+        }
+
+            public void SetGlobalValue(float value, float duration = 0.3f)
         {
             float clampedValue = Mathf.Clamp(value, totalMin, totalMax);
             currentAmount = clampedValue;
@@ -124,6 +139,9 @@ namespace sliderCorruption
                 }
             }
         }
-
+        private void OnDisable()
+        {
+            controller.OnCorruptionValueChange -= SetGlobalValue;
+        }
     }
 }

@@ -82,7 +82,7 @@ ParticleSystem:
   ringBufferLoopRange: {x: 0, y: 1}
   emitterVelocityMode: 1
   looping: 1
-  prewarm: 0
+  prewarm: 1
   playOnAwake: 1
   useUnscaledTime: 0
   autoRandomSeed: 1
@@ -4945,6 +4945,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 15610fc1608b7da40aab8e3d47b691e2, type: 3}
   - {fileID: 21300000, guid: 4e7622edc39298245a6b437426397c9d, type: 3}
   - {fileID: 21300000, guid: 5b01da9455d7c5f4485ba5e5283675fb, type: 3}
+  corruptionFog: {fileID: 2794830753572588472}
 --- !u!212 &5072129065889256791
 SpriteRenderer:
   m_ObjectHideFlags: 0

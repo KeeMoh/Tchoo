@@ -51,12 +51,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98e51e06f8b3f0644926fe7898813ecf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 2
+  baseMoveSpeed: 2
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
   groundTrigger: {fileID: 0}
   damage: 1
+  baseLife: 10
+  corruptionFog: {fileID: 0}
+  soulPrefab: {fileID: 7872498596437406836, guid: aa2ada5b33d561d42afb321eb7e255f3, type: 3}
+  soulType: 0
+  soulLifeDuration: 8
   trapToSpawn: {fileID: 1859569122382248189, guid: 8e131e927f265624aa65b3280dee565a, type: 3}
   maxTrap: 3
   trapLifeTime: 6
