@@ -25197,6 +25197,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1442468473066678534}
   - component: {fileID: 9184377216133638659}
+  - component: {fileID: 7848422636049655261}
   - component: {fileID: 8901516272700346701}
   - component: {fileID: 6070523167340184795}
   - component: {fileID: 7972092676652763084}
@@ -25239,44 +25240,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3014e433481b9bc43b18dea35a884e47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 6070523167340184795}
-  moveSpeed: 5.5
-  jumpForce: 11
-  jumpHoldDurations:
-  - 0.08
-  - 0.21
-  - 0.33
-  - 0.6
-  minimunJumpForceForDurations:
-  - 10.5
-  - 9.5
-  - 7
-  - 0
-  decelerationValue: 0.06
-  doubleJumpForce: 8.6
-  maxJump: 1
-  fallMinSpeed: -6
-  fallBaseSpeed: -8.5
-  fallMaxSpeed: -10
-  baseGravity: 2
-  gravityMultiplier: 1.75
-  groundCheckPos: {fileID: 6114358535947880977}
-  groundCheckSize: {x: 0.425, y: 0.02}
-  groundCheckOffset: {x: 0, y: -0.765}
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 8
-  wallCheckPos: {fileID: 1391436307970792157}
-  wallCheckSize: {x: 0.03, y: 0.8}
-  wallCheckOffset: {x: 0.27, y: -0.25}
-  wallLayer:
-    serializedVersion: 2
-    m_Bits: 8
-  wallSlideSpeed: 6
-  wallJumpPower: {x: 4, y: 10}
-  wallJumpDirection: 0
-  wallJumpTime: 0.2
-  wallJumpTimer: 0
+  movementHandler: {fileID: 7848422636049655261}
   minCorruption: -3
   maxCorruption: 3
   colorCorruption:
@@ -25332,7 +25296,49 @@ MonoBehaviour:
   pauseMenu: {fileID: 0}
   horizontalMovement: 0
   verticalMovement: 0
-  turnSpeed: 0.76
+--- !u!114 &7848422636049655261
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6522806811999360450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b38649d96ca4e934fa88c5322a4dea79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rb: {fileID: 6070523167340184795}
+  moveSpeed: 0
+  turnSpeed: 0.25
+  jumpForce: 0
+  jumpHoldDurations: []
+  minimunJumpForceForDurations: []
+  decelerationValue: 0
+  doubleJumpForce: 0
+  maxJump: 0
+  fallMinSpeed: 0
+  fallBaseSpeed: 0
+  fallMaxSpeed: 0
+  baseGravity: 0
+  gravityMultiplier: 0
+  groundCheckPos: {fileID: 6114358535947880977}
+  groundCheckSize: {x: 0, y: 0}
+  groundCheckOffset: {x: 0, y: 0}
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  wallCheckPos: {fileID: 1391436307970792157}
+  wallCheckSize: {x: 0, y: 0}
+  wallCheckOffset: {x: 0, y: 0}
+  wallLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  wallSlideSpeed: 0
+  wallJumpPower: {x: 5, y: 10}
+  wallJumpDirection: 0
+  wallJumpTime: 0.5
+  wallJumpTimer: 0
 --- !u!212 &8901516272700346701
 SpriteRenderer:
   m_ObjectHideFlags: 0

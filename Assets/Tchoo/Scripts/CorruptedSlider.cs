@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 public class CorruptedSlider : MonoBehaviour
 {    
-    [SerializeField] private PlayerControllerOLD controller;
+    [SerializeField] private PlayerController controller;
     [SerializeField] private Slider _sliderHead;
     [SerializeField] private SliderCorruptionElement[] _sliderArray;
     [SerializeField] private TextMeshProUGUI debugCorruptionValue;
