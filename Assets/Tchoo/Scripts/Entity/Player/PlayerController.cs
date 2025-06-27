@@ -73,18 +73,21 @@ public class PlayerController : MonoBehaviour
         }
         currentCorruption = minCorruption;
         UpdateCorruption(false, false);
+        Subscribe();
     }
 
     private void Subscribe()
     {
         movementHandler.OnGroundedStateChanged += HandleGroundedChange;
         movementHandler.OnFlipRequested += Flip;
+        movementHandler.OnJumpProcessed += PlayJumpEffects;
     }
 
     void Update()
     {
         movementHandler.HandleMovementInput(horizontalMovement, verticalMovement,  isHoldingJump);
         ProcessDamage();
+        CheckFallingSpeed();
         if (!movementHandler.IsWallJumping && _damageTimer <= 0)
         {
             if (isFacingRight && horizontalMovement < -0.1f || !isFacingRight && horizontalMovement > 0.1f)
@@ -145,7 +148,7 @@ public class PlayerController : MonoBehaviour
         if (context.performed)
         {
             isHoldingJump = true;
-            movementHandler.ProcessJump();
+            movementHandler.TryProcessJump();
             //OnJumpPressed?.Invoke(isHoldingJump);
             //ProcessJump();
         }
@@ -170,6 +173,11 @@ public class PlayerController : MonoBehaviour
 
     private void HandleGroundedChange(bool grounded)
     {
+        Debug.Log("IS GROUNDED " + grounded);
+        if(grounded)
+        {
+            PlayLandingEffect();
+        }
         isGrounded = grounded;
     }
 
@@ -347,6 +355,7 @@ public class PlayerController : MonoBehaviour
         _invulnerabilityTimer += amount;
     }
 
+    [Obsolete]
     public void CollectFoolet(Color baseColor, Color glowColor, Power power)
     {
         fooletMat.SetColor("_GlowColor", glowColor);
@@ -418,39 +427,33 @@ public class PlayerController : MonoBehaviour
         pauseMenu.PauseGame();
     }
 
+    private void PlayJumpEffects(JumpType jumpType)
+    {
+        if (jumpType == JumpType.None) return;
+
+        animator.SetTrigger("jump");
+
+        if (jumpType == JumpType.DoubleJump)
+        {
+            foreach (var effect in jumpEffects)
+            {
+                effect.Play();
+            }
+        }
+
+        if (jumpType == JumpType.WallJump)
+        {
+            wallJumpEffect.Play();
+        }
+    }
+
+    //Called by animator event
     private void PlayAnimationEffect(AnimationEffect effect)
     {
         Debug.Log("Play anim " + effect.ToString());
         animationEffect.PlayAnim(effect);
     }
-
-
-    //private bool IsGrounded()
-    //{
-    //    if (Physics2D.OverlapBox(groundCheckPos.position + (Vector3)groundCheckOffset, groundCheckSize, 0, groundLayer))
-    //    {
-    //        if (Mathf.Abs(rb.linearVelocityY) > Mathf.Epsilon)
-    //        {
-    //            //IsGrounded but still in the air, velocity != 0
-    //            return false;
-    //        }
-    //        if (timeSinceGrounded > 0.4f)
-    //        {
-    //            Debug.Log("Play particles : " + timeSinceGrounded);
-    //            PlayLandingEffect();
-    //        }
-    //        timeSinceGrounded = 0;
-    //        return true;
-    //    }
-    //    else
-    //    {
-    //        timeSinceGrounded += Time.deltaTime;
-    //        return false;
-    //    }
-    //}    
     
-
-
     private void Flip()
     {
         if (isGrounded && movementHandler.CurrentVelocity.y < 0.01f)
@@ -478,31 +481,7 @@ public class PlayerController : MonoBehaviour
         //Notify others
         OnDirectionXChange?.Invoke(ls.x);
         movementHandler.FlipCheckOffsets(ls.x);
-        //wallCheckOffset.x *= -1f;
-        //groundCheckOffset.x *= -1f;
         debugText.transform.localScale = ls;
         wallJumpEffect.transform.localScale = ls;
     }
-
-    //private float GetFallSpeed()
-    //{
-    //    if(verticalMovement > 0.4f)
-    //    {
-    //        return fallMinSpeed;
-    //    }
-    //    if (verticalMovement < -0.4f)
-    //    {
-    //        return fallMaxSpeed;
-    //    }
-    //    return fallBaseSpeed;
-    //}
-
-    //private void OnDrawGizmosSelected()
-    //{
-    //    Gizmos.color = Color.yellow;
-    //    Gizmos.DrawCube(groundCheckPos.position + (Vector3)groundCheckOffset, groundCheckSize);        
-        
-    //    Gizmos.color = Color.blue;
-    //    Gizmos.DrawCube(wallCheckPos.position + (Vector3)wallCheckOffset, wallCheckSize);
-    //}
 }

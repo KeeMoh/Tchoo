@@ -193,7 +193,9 @@ public class EnemyBehaviour : MonoBehaviour
 
     private void PrepareToShoot()
     {
-        if(currentLifeAmount <= 0) return; else { Debug.Log("Prepaaaare"); } 
+        if(currentLifeAmount <= 0) return; else { 
+            //Debug.Log("Prepaaaare"); 
+        } 
         StartCoroutine(StartAttack());
     }
 

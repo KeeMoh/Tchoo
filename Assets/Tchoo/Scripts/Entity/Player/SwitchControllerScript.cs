@@ -15,7 +15,7 @@ public class SwitchControllerScript : MonoBehaviour
 
     private void Start()
     {
-        playerMovement.SwitchSettings(settings[settingsIndex]);
+        //playerMovement.SwitchSettings(settings[settingsIndex]);
         debugInfo.text = "mode n°" + (settingsIndex + 1).ToString();
         debugInfo.transform.DOScale(1.3f, 0.25f).OnComplete(() => debugInfo.transform.DOScale(1, 0.25f));
         debugInfo.DOColor(Color.red, 0.25f).OnComplete(() => debugInfo.DOColor(Color.white, 0.25f));

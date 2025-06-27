@@ -64,6 +64,7 @@ public class PlayerMovementHandler : MonoBehaviour
     //public event Action OnLanded;
     public event Action OnFlipRequested;
     public event Action<bool> OnGroundedStateChanged;
+    public event Action<JumpType> OnJumpProcessed;
     public Vector2 CurrentVelocity => rb.linearVelocity;
 
     private void Start()
@@ -145,6 +146,7 @@ public class PlayerMovementHandler : MonoBehaviour
 
     public void StopMovement(int stop)
     {
+        Debug.Log("Stop movement " + stop);
         jumpForce = stop == 1 ? 0 : defaultJumpForce;
         moveSpeed = stop == 1 ? 0 : defaultMoveSpeed;
     }
@@ -174,7 +176,7 @@ public class PlayerMovementHandler : MonoBehaviour
         {
             if (wasGrounded && rb.linearVelocityY > -0.01f)
             {
-                ProcessJump();
+                TryProcessJump();
                 hasJustPressedJump = false;
                 timeSinceJumpPressed = 0f;
             }
@@ -341,7 +343,7 @@ public class PlayerMovementHandler : MonoBehaviour
     }
 
     //Called by inputs or hasJustPressedJump (TryPreJump)
-    public void ProcessJump()
+    public void TryProcessJump()
     {
         Debug.Log("PROCESS JUMP");
 
@@ -355,6 +357,7 @@ public class PlayerMovementHandler : MonoBehaviour
             endFirstJump = false;
 
             rb.linearVelocity = new Vector2(wallJumpDirection * wallJumpPower.x, wallJumpPower.y);
+            OnJumpProcessed?.Invoke(JumpType.WallJump);
             //animator.SetTrigger("jump"); TODO anim
             //wallJumpEffect.Play(); TODO vfx
 
@@ -378,7 +381,7 @@ public class PlayerMovementHandler : MonoBehaviour
             Debug.Log("-------- start Jump --------");
             rb.linearVelocityY = jumpForce;
             //isHoldingJump = true;
-            //animator.SetTrigger("jump"); //TODO Anim
+            OnJumpProcessed?.Invoke(JumpType.BaseJump);
             StopAllCoroutines();
             jumpPressedTime = 0;
             jumpPressedTimeDelta = 0;
@@ -395,12 +398,8 @@ public class PlayerMovementHandler : MonoBehaviour
                 isInFirstJumpAscent = false;
                 endFirstJump = false;
 
-                //animator.SetTrigger("jump"); TODO Anim
+                OnJumpProcessed?.Invoke(JumpType.DoubleJump);
                 rb.linearVelocityY = doubleJumpForce;
-                //foreach (var effect in jumpEffects) // TODO Vfx
-                //{
-                //    effect.Play();
-                //}
                 jumpRemaining--;
                 return;
             }
@@ -464,4 +463,12 @@ public class PlayerMovementHandler : MonoBehaviour
         Gizmos.color = Color.blue;
         Gizmos.DrawCube(wallCheckPos.position + (Vector3)wallCheckOffset, wallCheckSize);
     }
+}
+
+public enum JumpType
+{
+    None,
+    BaseJump,
+    WallJump,
+    DoubleJump
 }
