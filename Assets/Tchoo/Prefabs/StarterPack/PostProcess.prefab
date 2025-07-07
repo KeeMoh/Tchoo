@@ -431,6 +431,44 @@ MonoBehaviour:
     _maxIntensity: 1.5
     _speed: 2
     _baseColor: {r: 1, g: 0.43867922, b: 0.8168048, a: 0}
+  - _mat: {fileID: 2100000, guid: db0d1be1966d98040aa99f699ccf01ba, type: 2}
+    _intensityOverTime:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 6.775781
+        outSlope: 6.775781
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.09039548
+      - serializedVersion: 3
+        time: 0.5
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: -6.6375027
+        outSlope: -6.6375027
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.09039545
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 0
+    _minIntensity: 2
+    _maxIntensity: 4
+    _speed: 2
+    _baseColor: {r: 1, g: 1, b: 1, a: 0}
 --- !u!1 &5471244775973158841
 GameObject:
   m_ObjectHideFlags: 0

@@ -58,7 +58,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: db0d1be1966d98040aa99f699ccf01ba, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -79,12 +79,12 @@ SpriteRenderer:
   m_SortingLayerID: -1121291019
   m_SortingLayer: 7
   m_SortingOrder: 0
-  m_Sprite: {fileID: -663409099, guid: dfef77988bd059d429c1bc89e0aab2bc, type: 3}
+  m_Sprite: {fileID: 1873985099, guid: c00ea604913be4146b7860b95ab194c3, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.7876923, y: 0.7876923}
+  m_Size: {x: 2, y: 4}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -125,6 +125,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 4881824407675681174}
+  baseColor: {r: 1, g: 1, b: 1, a: 1}
+  evilColor: {r: 0.74759734, g: 0.059407253, b: 0.8396226, a: 1}
+  endLevitationColor: {r: 1, g: 0, b: 0.16923761, a: 1}
+  purifiedColor: {r: 0.4481132, g: 0.8637009, b: 1, a: 1}
 --- !u!61 &3321297097800934590
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -163,8 +167,8 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 3.1604939, y: 3.1604939}
-    newSize: {x: 0.7876923, y: 0.7876923}
+    oldSize: {x: 2, y: 4}
+    newSize: {x: 2, y: 4}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0

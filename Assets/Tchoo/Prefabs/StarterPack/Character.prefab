@@ -20047,7 +20047,6 @@ GameObject:
   - component: {fileID: 6421716052421959683}
   - component: {fileID: 5697897857356223987}
   - component: {fileID: 8944349707749291175}
-  - component: {fileID: 6554372290398698303}
   m_Layer: 8
   m_Name: SpriteEffect
   m_TagString: Untagged
@@ -20122,7 +20121,7 @@ SpriteRenderer:
   m_Size: {x: 3.1507692, y: 3.1507692}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!114 &6421716052421959683
@@ -20205,18 +20204,6 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1.5501251, y: 1.2220001}
   m_EdgeRadius: 0
---- !u!114 &6554372290398698303
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5435010534061190889}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8bebc73a98b96e34b96c3ace06700fbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &6325287119263473211
 GameObject:
   m_ObjectHideFlags: 0
@@ -25198,6 +25185,7 @@ GameObject:
   - component: {fileID: 1442468473066678534}
   - component: {fileID: 9184377216133638659}
   - component: {fileID: 7848422636049655261}
+  - component: {fileID: 81536063829541996}
   - component: {fileID: 8901516272700346701}
   - component: {fileID: 6070523167340184795}
   - component: {fileID: 7972092676652763084}
@@ -25241,6 +25229,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementHandler: {fileID: 7848422636049655261}
+  animationHandler: {fileID: 81536063829541996}
   minCorruption: -3
   maxCorruption: 3
   colorCorruption:
@@ -25339,6 +25328,18 @@ MonoBehaviour:
   wallJumpDirection: 0
   wallJumpTime: 0.5
   wallJumpTimer: 0
+--- !u!114 &81536063829541996
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6522806811999360450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9d277d1ebf9c45468160380e96e31fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!212 &8901516272700346701
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -25391,7 +25392,7 @@ SpriteRenderer:
   m_Size: {x: 1.5753846, y: 1.5753846}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!50 &6070523167340184795
