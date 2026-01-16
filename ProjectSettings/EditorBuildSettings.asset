@@ -32,6 +32,9 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Tchoo/Scenes/OLD/Level1.unity
     guid: 5185bdf9976596a408e177d778dc7c6b
+  - enabled: 1
+    path: Assets/Tchoo/Scenes/Level_3.unity
+    guid: 7cf315bfeac9475438ce638cb69df724
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: b8b8517101c7dea4b9fb1ee132b23b91, type: 3}
   m_UseUCBPForAssetBundles: 0

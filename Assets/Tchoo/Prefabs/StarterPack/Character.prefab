@@ -25340,6 +25340,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9d277d1ebf9c45468160380e96e31fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animStateArray:
+  - {fileID: 11400000, guid: c1aa5bc787ec3d547993224b0f1dc11d, type: 2}
+  - {fileID: 11400000, guid: 8cf42fcbd0292df44a2e41809e959305, type: 2}
+  - {fileID: 11400000, guid: 157e04256242e1443a6391ffecf7275d, type: 2}
+  - {fileID: 11400000, guid: d43333a4441179446b518b8cd95e9ffe, type: 2}
+  - {fileID: 11400000, guid: abe85104d92ad0a4289e18102e70aa44, type: 2}
+  - {fileID: 11400000, guid: 2019043b75d0d2042a2a4b179c2839b2, type: 2}
+  - {fileID: 11400000, guid: d7f703e322097cb4e911cff4606a53af, type: 2}
+  - {fileID: 11400000, guid: e77c6a2fb581fa54ca044aa49cab8a70, type: 2}
+  - {fileID: 11400000, guid: a797300c0015d9c4c8364c5acff7a99d, type: 2}
+  - {fileID: 11400000, guid: 0ced49b60e1185348983798d3dc27eda, type: 2}
+  - {fileID: 11400000, guid: a55ad49562ed5b148b7dccca702cef10, type: 2}
+  - {fileID: 11400000, guid: 57d71dbd2cf120c479863d7c0963143f, type: 2}
+  - {fileID: 11400000, guid: a44a8e9a722b8dd4694094342d2e8f88, type: 2}
+  - {fileID: 11400000, guid: 495f5fc4ea83de04abafe74b3060e7c0, type: 2}
+  - {fileID: 11400000, guid: 5d29faadbae66254683c820c4855f43b, type: 2}
 --- !u!212 &8901516272700346701
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -25384,7 +25400,7 @@ SpriteRenderer:
   m_SortingLayerID: -1121291019
   m_SortingLayer: 7
   m_SortingOrder: 0
-  m_Sprite: {fileID: 1654655691, guid: 0e2cfb560649ba94f99d99b06734ac7a, type: 3}
+  m_Sprite: {fileID: 362378740, guid: 8501e9cffbda17541889f32f1faa0155, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -25392,7 +25408,7 @@ SpriteRenderer:
   m_Size: {x: 1.5753846, y: 1.5753846}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!50 &6070523167340184795
@@ -25538,7 +25554,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &42125213970883805
 RectTransform:
   m_ObjectHideFlags: 0

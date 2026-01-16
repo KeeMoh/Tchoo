@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: f019123ba7b4d8a46951848ef0c89077
+guid: cb5d62e8d5389ba4da0e953def77317c
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -48,7 +48,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 128
+  spritePixelsToUnits: 256
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -69,7 +69,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 4096
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -136,329 +136,246 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: plateformeHerb - Copie_0
+      name: plateformeHerb - Copie(3)_0
       rect:
         serializedVersion: 2
-        x: 512
-        y: 1664
-        width: 128
-        height: 128
+        x: 2304
+        y: 2816
+        width: 256
+        height: 256
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape:
-      - - {x: 64, y: 35}
-        - {x: -49, y: 35}
-        - {x: -49, y: -64}
-        - {x: 64, y: -64}
+      - - {x: 21, y: 63}
+        - {x: -24, y: 63}
+        - {x: -24, y: 20}
+        - {x: -70, y: 20}
+        - {x: -94, y: -46}
+        - {x: -94, y: -128}
+        - {x: 128, y: -128}
+        - {x: 128, y: 105}
+        - {x: 21, y: 105}
       tessellationDetail: 0
       bones: []
-      spriteID: 10fbd042fdf417d43bb3042053601b8b
-      internalID: 1554688112
+      spriteID: b9640ba9280a6fe47bdac1e4f3231400
+      internalID: -560914295
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: plateformeHerb - Copie_1
+      name: plateformeHerb - Copie(3)_1
       rect:
         serializedVersion: 2
-        x: 640
-        y: 1664
-        width: 128
-        height: 128
+        x: 2560
+        y: 2816
+        width: 256
+        height: 256
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape:
-      - - {x: -64, y: -64}
-        - {x: 64, y: -64}
-        - {x: 64, y: 35}
-        - {x: -64, y: 35}
+      - - {x: -128, y: -128}
+        - {x: 128, y: -128}
+        - {x: 128, y: 105}
+        - {x: -128, y: 105}
       tessellationDetail: 0
       bones: []
-      spriteID: 5e5d3a920aece784a8a4011725b23deb
-      internalID: 1081469449
+      spriteID: d88cce4aa83e9514ab371eec4d7cbb55
+      internalID: 452485005
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: plateformeHerb - Copie_2
+      name: plateformeHerb - Copie(3)_2
       rect:
         serializedVersion: 2
-        x: 768
-        y: 1664
-        width: 128
-        height: 128
+        x: 2816
+        y: 2816
+        width: 256
+        height: 256
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape:
-      - - {x: 64, y: 35}
-        - {x: -64, y: 35}
-        - {x: -64, y: -64}
-        - {x: 64, y: -64}
+      - - {x: -128, y: -128}
+        - {x: 80, y: -128}
+        - {x: 80, y: 29}
+        - {x: 17, y: 29}
+        - {x: 17, y: 65}
+        - {x: -28, y: 65}
+        - {x: -28, y: 105}
+        - {x: -128, y: 105}
       tessellationDetail: 0
       bones: []
-      spriteID: 98f5c394d04644943957000d414b6d88
-      internalID: -1866256485
+      spriteID: 6b59f420764ba614aac34ff343ba250f
+      internalID: 582391639
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: plateformeHerb - Copie_3
+      name: plateformeHerb - Copie(3)_3
       rect:
         serializedVersion: 2
-        x: 1024
-        y: 1664
-        width: 128
-        height: 128
+        x: 2304
+        y: 2560
+        width: 256
+        height: 256
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape:
-      - - {x: 47, y: 35}
-        - {x: -64, y: 35}
-        - {x: -64, y: -64}
-        - {x: 47, y: -64}
+      - - {x: -95, y: -128}
+        - {x: 128, y: -128}
+        - {x: 128, y: 128}
+        - {x: -95, y: 128}
       tessellationDetail: 0
       bones: []
-      spriteID: 35a89b0d39583dd48977f8c75d5f97cf
-      internalID: -323951863
+      spriteID: 7f761d835e8e13045838310d3ec25285
+      internalID: 513062676
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: plateformeHerb - Copie_4
+      name: plateformeHerb - Copie(3)_4
       rect:
         serializedVersion: 2
-        x: 512
-        y: 1536
-        width: 128
-        height: 128
+        x: 2560
+        y: 2560
+        width: 256
+        height: 256
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape:
-      - - {x: 64, y: 64}
-        - {x: -49, y: 64}
-        - {x: -49, y: -64}
-        - {x: 64, y: -64}
+      - - {x: 128, y: 128}
+        - {x: -128, y: 128}
+        - {x: -128, y: -128}
+        - {x: 128, y: -128}
       tessellationDetail: 0
       bones: []
-      spriteID: fbd3637803b444345af5979cd23eed0f
-      internalID: -1910838473
+      spriteID: 7539f64cc9888ed4598c242ee1bceefc
+      internalID: 891375768
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: plateformeHerb - Copie_5
+      name: plateformeHerb - Copie(3)_5
       rect:
         serializedVersion: 2
-        x: 640
-        y: 1536
-        width: 128
-        height: 128
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: fd6a89f6f93f299428aef9217f0a16b4
-      internalID: 837208113
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: plateformeHerb - Copie_6
-      rect:
-        serializedVersion: 2
-        x: 768
-        y: 1536
-        width: 128
-        height: 128
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 014fffd8123289a4ba2cc43637b2a8b0
-      internalID: -1194422419
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: plateformeHerb - Copie_7
-      rect:
-        serializedVersion: 2
-        x: 896
-        y: 1536
-        width: 128
-        height: 128
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 296962839f792d146957043c9ace6186
-      internalID: 594557380
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: plateformeHerb - Copie_8
-      rect:
-        serializedVersion: 2
-        x: 1024
-        y: 1536
-        width: 128
-        height: 128
+        x: 2816
+        y: 2560
+        width: 256
+        height: 256
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape:
-      - - {x: 47, y: 64}
-        - {x: -64, y: 64}
-        - {x: -64, y: -64}
-        - {x: 47, y: -64}
+      - - {x: -128, y: -128}
+        - {x: 80, y: -128}
+        - {x: 80, y: 128}
+        - {x: -128, y: 128}
       tessellationDetail: 0
       bones: []
-      spriteID: 33842951381df174f84d4fe471f9775e
-      internalID: -1890290920
+      spriteID: a20d4d6a92bf2c24fa3bb62a52935724
+      internalID: -1862778619
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: plateformeHerb - Copie_9
+      name: plateformeHerb - Copie(3)_6
       rect:
         serializedVersion: 2
-        x: 512
-        y: 1408
-        width: 128
-        height: 128
+        x: 2304
+        y: 2304
+        width: 256
+        height: 256
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape:
-      - - {x: 64, y: 64}
-        - {x: -52, y: 64}
-        - {x: -52, y: 58}
-        - {x: -40, y: 7}
-        - {x: -10, y: -34}
-        - {x: 46, y: -56}
-        - {x: 64, y: -56}
+      - - {x: -46, y: 34}
+        - {x: 38, y: -14}
+        - {x: 128, y: -14}
+        - {x: 128, y: 128}
+        - {x: -94, y: 128}
       tessellationDetail: 0
       bones: []
-      spriteID: 3a7b0df0ddd18004b8b720b8c77f9cd7
-      internalID: -1317803271
+      spriteID: 65d6d011fd8b1c8498bf00196369d661
+      internalID: -1526975614
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: plateformeHerb - Copie_10
+      name: plateformeHerb - Copie(3)_7
       rect:
         serializedVersion: 2
-        x: 640
-        y: 1408
-        width: 128
-        height: 128
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 9d74761e2035da54197648987532516a
-      internalID: -1561621483
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: plateformeHerb - Copie_11
-      rect:
-        serializedVersion: 2
-        x: 768
-        y: 1408
-        width: 128
-        height: 128
+        x: 2560
+        y: 2304
+        width: 256
+        height: 256
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape:
-      - - {x: 64, y: -56}
-        - {x: 64, y: 64}
-        - {x: -64, y: 64}
-        - {x: -64, y: -56}
+      - - {x: -128, y: -14}
+        - {x: 128, y: -14}
+        - {x: 128, y: 128}
+        - {x: -128, y: 128}
       tessellationDetail: 0
       bones: []
-      spriteID: 4827b5847b8cfff4799646bf987b9c5b
-      internalID: 738502393
+      spriteID: 41c56e915cb5a3e45ba0b5676d0a2d44
+      internalID: -1158472370
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: plateformeHerb - Copie_12
+      name: plateformeHerb - Copie(3)_8
       rect:
         serializedVersion: 2
-        x: 1024
-        y: 1408
-        width: 128
-        height: 128
+        x: 2816
+        y: 2304
+        width: 256
+        height: 256
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape:
-      - - {x: -5, y: -53}
-        - {x: 43, y: -8}
-        - {x: 49, y: 38}
-        - {x: 49, y: 64}
-        - {x: -64, y: 64}
-        - {x: -64, y: -58}
-        - {x: -41, y: -58}
+      - - {x: -128, y: -14}
+        - {x: -34, y: -14}
+        - {x: 80, y: 62.764404}
+        - {x: 80, y: 128}
+        - {x: -128, y: 128}
       tessellationDetail: 0
       bones: []
-      spriteID: b329723c2a08fd4488a5c56fe41ec452
-      internalID: -1830120013
+      spriteID: 5eb8c9ffa79352c43997932d313d54fb
+      internalID: -120395505
       vertices: []
       indices: 
       edges: []
@@ -467,7 +384,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: f68a90c9ee41389418a003af1f3b1823
+    spriteID: 83d08a5cffd98434fb51e175070d54a8
     internalID: 0
     vertices: []
     indices: 
@@ -477,19 +394,15 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      plateformeHerb - Copie_0: 1554688112
-      plateformeHerb - Copie_1: 1081469449
-      plateformeHerb - Copie_10: -1561621483
-      plateformeHerb - Copie_11: 738502393
-      plateformeHerb - Copie_12: -1830120013
-      plateformeHerb - Copie_2: -1866256485
-      plateformeHerb - Copie_3: -323951863
-      plateformeHerb - Copie_4: -1910838473
-      plateformeHerb - Copie_5: 837208113
-      plateformeHerb - Copie_6: -1194422419
-      plateformeHerb - Copie_7: 594557380
-      plateformeHerb - Copie_8: -1890290920
-      plateformeHerb - Copie_9: -1317803271
+      plateformeHerb - Copie(3)_0: -560914295
+      plateformeHerb - Copie(3)_1: 452485005
+      plateformeHerb - Copie(3)_2: 582391639
+      plateformeHerb - Copie(3)_3: 513062676
+      plateformeHerb - Copie(3)_4: 891375768
+      plateformeHerb - Copie(3)_5: -1862778619
+      plateformeHerb - Copie(3)_6: -1526975614
+      plateformeHerb - Copie(3)_7: -1158472370
+      plateformeHerb - Copie(3)_8: -120395505
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

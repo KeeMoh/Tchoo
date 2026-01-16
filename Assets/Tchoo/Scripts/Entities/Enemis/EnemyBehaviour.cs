@@ -174,7 +174,7 @@ public class EnemyBehaviour : MonoBehaviour
         yield return new WaitForSeconds(spawnTimer);
         if (currentLifeAmount <= 0) yield break;
         animator.SetTrigger("Attack");
-        Debug.Log("SET TRIGGER ATTACK..");
+        //Debug.Log("SET TRIGGER ATTACK..");
         moveSpeed = 0;
         //Debug.Log("animation is finish !");
         animator.speed = 0;

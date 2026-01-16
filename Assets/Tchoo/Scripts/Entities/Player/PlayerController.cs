@@ -80,6 +80,7 @@ public class PlayerController : MonoBehaviour
     private void Subscribe()
     {
         movementHandler.OnGroundedStateChanged += HandleGroundedChange;
+        movementHandler.OnGroundedStateChanged += animationHandler.HandleGroundedStateChange;
         movementHandler.OnFlipRequested += Flip;
         movementHandler.OnJumpProcessed += PlayJumpEffects;
     }
@@ -88,7 +89,6 @@ public class PlayerController : MonoBehaviour
     {
         movementHandler.HandleMovementInput(horizontalMovement, verticalMovement,  isHoldingJump);
         ProcessDamage();
-        CheckFallingSpeed();
         if (!movementHandler.IsWallJumping && _damageTimer <= 0)
         {
             if (isFacingRight && horizontalMovement < -0.1f || !isFacingRight && horizontalMovement > 0.1f)
@@ -96,14 +96,15 @@ public class PlayerController : MonoBehaviour
                 Flip();
             }
         }
-        animationHandler.SetVelocity(movementHandler.CurrentVelocity);
         //animator.SetFloat("yVelocity", movementHandler.CurrentVelocity.y);
         //animator.SetFloat("magnitude", movementHandler.CurrentVelocity.magnitude);
     }
 
     private void FixedUpdate()
     {
-            movementHandler.ApplyMovement(); // uses stored inputs
+        movementHandler.ApplyMovement(); // uses stored inputs
+        CheckFallingSpeed();
+        animationHandler.SetVelocity(movementHandler.CurrentVelocity);
     }
 
     public void Move(InputAction.CallbackContext context)
@@ -207,18 +208,22 @@ public class PlayerController : MonoBehaviour
     {
         if (context.performed)
         {
-                animator.SetTrigger("Attack");
-            //if (isGrounded)
-            //{
-            //}
+            if (isGrounded)
+            {
+                animationHandler.TryTriggerAnim(EPlayerAnim.Attack);
+            }
+            else
+            {
+                animationHandler.TryTriggerAnim(EPlayerAnim.AerialAttack);
+            }
         }
     }
 
     public void Purify(InputAction.CallbackContext context)
     {
-        if (context.performed && isGrounded)
+        if (context.performed)
         {
-            animator.SetTrigger("Purify");
+            animationHandler.TryTriggerAnim(EPlayerAnim.Purify);
         }
     }
 
@@ -274,9 +279,9 @@ public class PlayerController : MonoBehaviour
         GainSanity(0.5f);
     }
 
-    public void TakeDamage(float amount, Vector2 from)
+    public void TakeDamage(float amount, Vector2 from, bool bypassInvulnerability = false)
     {
-        if (_invulnerabilityTimer > 0)
+        if (_invulnerabilityTimer > 0 && !bypassInvulnerability)
         {
             Debug.Log("isInvunerable : can't take dmg");
             return;
@@ -286,7 +291,17 @@ public class PlayerController : MonoBehaviour
         else direction = 1;
         
         movementHandler.EjectPlayer(new Vector2(direction * damageEjectionPower.x, damageEjectionPower.y));
-        animator.SetTrigger("getHit");
+        animationHandler.TryTriggerAnim(EPlayerAnim.GetHit);
+        TakeDamage(amount, bypassInvulnerability);
+    }
+
+    public void TakeDamage(float amount, bool bypassInvulnerability = false)
+    {
+        if (_invulnerabilityTimer > 0 && !bypassInvulnerability)
+        {
+            Debug.Log("isInvunerable : can't take dmg");
+            return;
+        }
         getHitEffect.Play();
 
         GainCorruption(amount);
@@ -439,8 +454,6 @@ public class PlayerController : MonoBehaviour
     {
         if (jumpType == JumpType.None) return;
 
-        animator.SetTrigger("jump");
-
         if (jumpType == JumpType.DoubleJump)
         {
             foreach (var effect in jumpEffects)
@@ -466,7 +479,8 @@ public class PlayerController : MonoBehaviour
     {
         if (isGrounded && movementHandler.CurrentVelocity.y < 0.01f)
         {
-            animator.SetTrigger("turn");
+            animationHandler.TryTriggerAnim(EPlayerAnim.Turn);
+            //animator.SetTrigger("turn");
         }
         else
         {
@@ -496,13 +510,17 @@ public class PlayerController : MonoBehaviour
     private void GameOver()
     {
         SetInvunerability(4f);
-        animator.SetTrigger("GameOver");
+        movementHandler.StopGravity(true);
+        //animator.SetTrigger("GameOver");
+        Debug.Log("Animation Death..");
+        animationHandler.TryTriggerAnim(EPlayerAnim.GameOver);
     }
 
     //Called by gameOver animation event
     private void OnGameOverAnimationComplete()
     {
         Debug.Log("pause without resume");
+        movementHandler.StopGravity(false);
         pauseMenu.GameOver();
         animator.Play("Idle", 0, 0f);
     }
