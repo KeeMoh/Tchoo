@@ -189,6 +189,7 @@ public class EnemyBehaviour : MonoBehaviour
         if (currentLifeAmount <= 0) return;
 
         HashSet<float> usedValues = new();
+        float safeCounter = 0;
 
         activeTraps.ForEach(t => {
             float randomX;
@@ -203,11 +204,12 @@ public class EnemyBehaviour : MonoBehaviour
                 {
                     if (Mathf.Abs(existingValue - randomX) < 1.2f)
                     {
+                        safeCounter++;
                         isValid = false;
                         break;
                     }
                 }
-            } while (!isValid);
+            } while (!isValid && safeCounter < 15);
 
             usedValues.Add(randomX); // Ajoute uniquement une valeur valide
             t.transform.position = transform.position;

@@ -655,7 +655,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1647195091364995872, guid: 86969c1e9c3ba244aa4da149ecd9bcba, type: 3}
       propertyPath: maxTrap
-      value: 5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1647195091364995872, guid: 86969c1e9c3ba244aa4da149ecd9bcba, type: 3}
       propertyPath: baseLife
@@ -671,7 +671,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1647195091364995872, guid: 86969c1e9c3ba244aa4da149ecd9bcba, type: 3}
       propertyPath: baseMoveSpeed
-      value: 3.5
+      value: 3.8
       objectReference: {fileID: 0}
     - target: {fileID: 1647195091364995872, guid: 86969c1e9c3ba244aa4da149ecd9bcba, type: 3}
       propertyPath: corruptionFog
@@ -72028,7 +72028,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1647195091364995872, guid: 86969c1e9c3ba244aa4da149ecd9bcba, type: 3}
       propertyPath: maxTrap
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1647195091364995872, guid: 86969c1e9c3ba244aa4da149ecd9bcba, type: 3}
       propertyPath: baseLife
@@ -72040,7 +72040,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1647195091364995872, guid: 86969c1e9c3ba244aa4da149ecd9bcba, type: 3}
       propertyPath: trapLifeTime
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 1647195091364995872, guid: 86969c1e9c3ba244aa4da149ecd9bcba, type: 3}
       propertyPath: baseMoveSpeed
@@ -72202,7 +72202,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1647195091364995872, guid: 86969c1e9c3ba244aa4da149ecd9bcba, type: 3}
       propertyPath: maxTrap
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1647195091364995872, guid: 86969c1e9c3ba244aa4da149ecd9bcba, type: 3}
       propertyPath: baseLife
@@ -72214,7 +72214,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1647195091364995872, guid: 86969c1e9c3ba244aa4da149ecd9bcba, type: 3}
       propertyPath: trapLifeTime
-      value: 5
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1647195091364995872, guid: 86969c1e9c3ba244aa4da149ecd9bcba, type: 3}
       propertyPath: baseMoveSpeed
